@@ -82,21 +82,88 @@ router.post('/login', async (req, res) => {
     }
 })
 
-
 // @route   POST /login:id
 // @desc    Login as invated member
+// @access  Public
+
+
+router.post('/login/:id', async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    const userAlreadyIn = [];
+
+    try {
+        const group = await Group.findById(req.params.id)
+        console.log(group)
+        group.members.forEach((member) => {if(member.email === email){
+            userAlreadyIn.push(email)
+        }})
+        if(!group) {
+            return res.status(400).json({group: 'this group do not exist'})
+        }
+        if (userAlreadyIn.length > 0){
+            return res.status(400).json({group: 'You are already member if this group'}) 
+        }
+        if (!group.invitedFriends.includes(email)){
+            return res.status(400).json({group: 'You are not invited to join this group'}) 
+        }
+
+
+
+        const member = await Member.findOne({email})
+        // check for member
+        if(!member) {
+            return res.status(404).json({email: 'Member not found'})
+        } 
+
+        // check password
+        const isMatch = await bcrypt.compare(password, member.password);
+        if(isMatch){
+            //Member matched
+
+            const payload = { id: member.id, mamber: member.name } // create JWT payload
+
+            //Sign Token
+            const token = await jwt.sign(payload, keys.secretOrKey, {expiresIn: "12h"});
+
+            group.members.push({
+                "name" : member.name,
+                "email" : member.email,
+                "_id" : member._id,
+                "bets" : []
+            })
+            
+            await group.save()
+
+            res.send({success: true, token: 'Bearer ' + token})
+
+        } else {
+            return res.status(400).json({password: "Password incorrect"})
+        }
+    } catch (e) {
+        res.status(400).send(e)
+    }
+})
+
+
+// @route   POST /register:id
+// @desc    Resgitser as invated member
 // @access  Public
 router.post('/register/:id', async (req, res) => {
     const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
+    const userAlreadyIn = [];
 
     try {
         const group = await Group.findById(req.params.id)
+        group.members.forEach((member) => {if(member.email === email){
+            userAlreadyIn.push(email)
+        }})
         if(!group) {
             return res.status(400).json({group: 'this group do not exist'})
         }
-        if (group.members.includes(email)){
+        if (userAlreadyIn.length > 0){
             return res.status(400).json({group: 'You are already member if this group'}) 
         }
         if (!group.invitedFriends.includes(email)){
@@ -113,24 +180,27 @@ router.post('/register/:id', async (req, res) => {
                 password: password, 
                 memberGroups: req.params.id.split()
             });
-            console.log(newMember)
             // hashing the password
-
+            
             await bcrypt.genSalt(10, (e, salt) => {
                 bcrypt.hash(newMember.password, salt, (e, hash) => {
                     if(e) throw e;
                     newMember.password = hash;
                     newMember.save()
-                        .then(member => res.json(member))
+                        .then((member) => {group.members.push({
+                            "name" : member.name,
+                            "email" : member.email,
+                            "_id" : member._id,
+                            "bets" : []
+                        })
+                        group.save()
+                    })
+                        
                         .catch(e => console.log(e))
                 })
-
             })
         }
-
-        group.members = group.members.concat(email.split())
-        await group.save();
-
+        res.send({msg: "succes"}) 
     } catch(e){
         res.status(400).send(e)
     }
@@ -160,12 +230,19 @@ router.get('/availablecompetitions', passport.authenticate('jwt', {session: fals
 router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (req, res) => {
     const to = req.body.invitedFriends
 
+    const newMember = {
+        name: req.user.name,
+        email: req.user.email,
+        _id: req.user.id,
+        bets: []
+    }
+
     const newGroup = new Group({
         id: req.body.id,
         name: req.body.name,
         admin: req.user._id,
         invitedFriends: to,
-        members: req.user.email.split()
+        members: newMember
     });
 
 
@@ -174,13 +251,13 @@ router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (
         if(group) {
             return res.status(400).json({group: 'group already exists'})
         }
-
+        console.log(newGroup)
         await newGroup.save()
         //Invite Friends
-        await sendInvitationEmail(to, req.body.name, newGroup._id)
+        // await sendInvitationEmail(to, req.body.name, newGroup._id)
         res.send({msg: "succes"})
     } catch(e){
-        res.send(e)
+        res.status(400).send(e)
     }
 
 })
@@ -209,7 +286,7 @@ router.post('/invitenewmembers', passport.authenticate('jwt', {session: false}),
             return res.status(400).json({group: `${memberAlreadyIn.toString().replace(',', ' and ')} already in group`})
         }
 
-        await sendInvitationEmail(to, req.body.name, group._id)
+        // await sendInvitationEmail(to, req.body.name, group._id)
         group.invitedFriends = group.invitedFriends.concat(to)
         await group.save();
         res.send({msg: "succes"})
