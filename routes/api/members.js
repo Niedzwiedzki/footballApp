@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken')
 const keys = require('../../config/keys')
 const passport = require('passport')
 const {sendInvitationEmail, sendGoodbyeEmail} = require('../../emails/account')
-const request= require('request')
+const request = require('request')
+const r2 = require("r2");
 
 //Load member model
 const Member = require('../../models/Member')
@@ -204,10 +205,11 @@ router.post('/register/:id', async (req, res) => {
 // @access  Private
 router.get('/availablecompetitions', passport.authenticate('jwt', {session: false}), async (req, res) => {
     const url = 'http://api.football-data.org/v2/competitions'
-    const header = keys.footballAPIToken
+    // const url = 'http://api.football-data.org/v2/competitions'
+    const headers = keys.footballAPIToken
     const availableCompetitions = []
     try {
-        await request({url, json: true, header}, (error, response) =>{
+        await request({url, json: true, headers}, (error, response) =>{
             response.body.competitions.forEach((competition) => availableCompetitions.push(competition.id, competition.name) )
             res.send(availableCompetitions);
         })
@@ -222,6 +224,15 @@ router.get('/availablecompetitions', passport.authenticate('jwt', {session: fals
 // @access  Private
 router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (req, res) => {
     const to = req.body.invitedFriends
+    const competitionId = req.body.competitionId
+    const url = `http://api.football-data.org/v2/competitions/${competitionId}/matches`
+    const headers = keys.footballAPIToken
+
+    //Checking for availability of competition - limited access
+    const availableCompetitions = [2000,2001,2002,2003,2013,2014,2015,2016,2017,2018,2019,2021]
+    if(!availableCompetitions.includes(competitionId)){
+        return res.status(400).json({group: 'You cannot organize a group for this competitions'})
+    }
 
     const newMember = {
         name: req.user.name,
@@ -230,29 +241,35 @@ router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (
         bets: []
     }
 
-    const newGroup = new Group({
-        id: req.body.id,
-        name: req.body.name,
-        admin: req.user._id,
-        invitedFriends: to,
-        members: newMember
-    });
-
-
     try {
         const group = await Group.findOne({admin: req.user._id, name: req.body.name})
         if(group) {
             return res.status(400).json({group: 'group already exists'})
         }
-        console.log(newGroup)
-        await newGroup.save()
-        //Invite Friends
-        await sendInvitationEmail(to, req.body.name, newGroup._id)
+        
+        const response = await r2(url, {headers}).response;
+        const json = await response.json()
+        const matches = json.matches
+        const newGroup = new Group({
+            competitionId: req.body.competitionId,
+            name: req.body.name,
+            admin: req.user._id,
+            invitedFriends: to,
+            members: newMember,
+            matches
+        });
 
         const admin = await Member.findById(req.user.id)
         admin.adminGroups.push(newGroup._id)
+        
+        await newGroup.save()
         await admin.save()
-        res.send({msg: "succes"})
+        //Invite Friends
+        if(newGroup.invitedFriends.length > 0){
+            await sendInvitationEmail(to, req.body.name, newGroup._id)
+        }
+        res.send({msg: "success"})
+
     } catch(e){
         res.status(400).send(e)
     }

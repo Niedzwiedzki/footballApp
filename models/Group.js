@@ -6,7 +6,7 @@ const GroupSchema = new Schema({
         type: String,
         required: true
     },
-    id: {
+    competitionId: {
         type: Number,
         required: true
     },
@@ -18,7 +18,12 @@ const GroupSchema = new Schema({
         type: Array
     },
     members: {
-        type: Array
+        type: Array,
+        required: true
+    },
+    matches: {
+        type: Array,
+        required: true
     }
 })
 
