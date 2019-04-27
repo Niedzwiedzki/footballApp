@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const keys = require('../../config/keys')
 const passport = require('passport')
-const {sendInvitationEmail} = require('../../emails/account')
+const {sendInvitationEmail, sendGoodbyeEmail} = require('../../emails/account')
 const request= require('request')
 
 //Load member model
@@ -28,9 +28,7 @@ router.post('/register', async (req, res) => {
                 email: req.body.email,
                 password: req.body.password
             });
-            
             // hashing the password
-
             await bcrypt.genSalt(10, (e, salt) => {
                 bcrypt.hash(newMember.password, salt, (e, hash) => {
                     if(e) throw e;
@@ -39,14 +37,11 @@ router.post('/register', async (req, res) => {
                         .then(member => res.json(member))
                         .catch(e => console.log(e))
                 })
-
             })
         }
     } catch (e) {
         res.status(400).send(e)
     }
-
-
 })
 
 // @route   POST /login
@@ -107,8 +102,6 @@ router.post('/login/:id', async (req, res) => {
         if (!group.invitedFriends.includes(email)){
             return res.status(400).json({group: 'You are not invited to join this group'}) 
         }
-
-
 
         const member = await Member.findOne({email})
         // check for member
@@ -254,7 +247,11 @@ router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (
         console.log(newGroup)
         await newGroup.save()
         //Invite Friends
-        // await sendInvitationEmail(to, req.body.name, newGroup._id)
+        await sendInvitationEmail(to, req.body.name, newGroup._id)
+
+        const admin = await Member.findById(req.user.id)
+        admin.adminGroups.push(newGroup._id)
+        await admin.save()
         res.send({msg: "succes"})
     } catch(e){
         res.status(400).send(e)
@@ -273,12 +270,11 @@ router.post('/invitenewmembers', passport.authenticate('jwt', {session: false}),
         if(!group) {
             return res.status(400).json({group: 'this group do not exist'})
         }
-
         // checking if new users are already in group
         const memberAlreadyIn = [];
-        await group.members.forEach(e1=>to.forEach((e2) => {
-            if(e1 === e2) {
-                memberAlreadyIn.push(e1)
+        await group.members.forEach(e1 => to.forEach((e2) => {
+            if(e1.email === e2) {
+                memberAlreadyIn.push(e2)
             }
         }))
 
@@ -286,7 +282,7 @@ router.post('/invitenewmembers', passport.authenticate('jwt', {session: false}),
             return res.status(400).json({group: `${memberAlreadyIn.toString().replace(',', ' and ')} already in group`})
         }
 
-        // await sendInvitationEmail(to, req.body.name, group._id)
+        await sendInvitationEmail(to, req.body.name, group._id)
         group.invitedFriends = group.invitedFriends.concat(to)
         await group.save();
         res.send({msg: "succes"})
@@ -295,5 +291,44 @@ router.post('/invitenewmembers', passport.authenticate('jwt', {session: false}),
     }
 })
 
+// @route   POST /invitenewmembers
+// @desc    invite new member
+// @access  Private
+router.delete('/deletemember', passport.authenticate('jwt', {session: false}), async (req, res) => {
+    const to = req.body.deletedFriend
+    let index 
+    try {
+        const group = await Group.findOne({admin: req.user._id, name: req.body.name})
+        if(!group) {
+            return res.status(400).json({group: 'this group do not exist'})
+        }
+        if(group.admin === to) {
+            return res.status(400).json({group: 'you cannot remove yourself'})
+        }
+        // checking if new users are already in group
+        const memberAlreadyIn = [];
+        await group.members.forEach(e1=> {
+            if(e1.email === to) {
+                memberAlreadyIn.push(e1.email)
+                index = group.members.indexOf(e1)
+            } 
+            
+        })
+
+        if(memberAlreadyIn.length === 0) {
+            return res.status(400).json({group: `${to} is not a member of this group`})
+        }
+        
+        group.members.splice(index, 1)
+        await sendGoodbyeEmail(to, req.body.name)
+
+        await group.save()
+        res.send({msg: "succes"})
+            
+    } catch (e) {
+        res.status(400).send(e)
+    }
+}
+)
 
 module.exports = router;

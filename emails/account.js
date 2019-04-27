@@ -11,6 +11,17 @@ const sendInvitationEmail = (email, group, id) => {
     })
 }
 
+const sendGoodbyeEmail = (email, group) => {
+    sgMail.send({
+        to: email,
+        from: 'kuban@op.pl',
+        subject: `Zostałeś usunięty z grupy ${group}`,
+        text: `Nie jesteś już członkiem grupy` 
+    })
+}
+
+
 module.exports = {
-    sendInvitationEmail
+    sendInvitationEmail,
+    sendGoodbyeEmail
 }
