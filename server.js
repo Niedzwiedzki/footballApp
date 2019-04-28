@@ -3,8 +3,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 
-const membersRouter = require('./routes/api/members')
-const groupsRouter = require('./routes/api/groups')
+const groupManagementRouter = require('./routes/api/groupManagement')
+const registerLoginRouter = require('./routes/api/register-login')
+const invitedRouter = require('./routes/api/invited')
+const deleteRegainRouter = require('./routes/api/delete-regain')
 
 const app = express();
 
@@ -28,8 +30,10 @@ app.use(passport.initialize())
 require('./config/passport.js')(passport)
 
 //Use Routes
-app.use(membersRouter)
-app.use(groupsRouter)
+app.use(groupManagementRouter)
+app.use(registerLoginRouter)
+app.use(invitedRouter)
+app.use(deleteRegainRouter)
 
 const port = process.env.PORT || 5000;
 
