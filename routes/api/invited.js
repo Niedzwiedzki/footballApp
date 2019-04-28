@@ -108,7 +108,7 @@ router.post('/register/:id', async (req, res) => {
                 memberGroups: req.params.id.split()
             });
             // hashing the password
-            
+           
             await bcrypt.genSalt(10, (e, salt) => {
                 bcrypt.hash(newMember.password, salt, (e, hash) => {
                     if(e) throw e;
@@ -121,13 +121,13 @@ router.post('/register/:id', async (req, res) => {
                             "bets" : []
                         })
                         group.save()
+                            .then(group => res.json(group.members))
+                            .catch(e => console.log(e))
                     })
-                        
-                        .catch(e => console.log(e))
                 })
             })
         }
-        res.send(newMember, group) 
+
     } catch(e){
         res.status(400).send(e)
     }
