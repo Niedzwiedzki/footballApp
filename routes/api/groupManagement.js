@@ -48,7 +48,7 @@ router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (
     const newMember = {
         name: req.user.name,
         email: req.user.email,
-        _id: req.user.id,
+        _id: req.user._id,
         bets: []
     }
 

@@ -7,6 +7,7 @@ const groupManagementRouter = require('./routes/api/groupManagement')
 const registerLoginRouter = require('./routes/api/register-login')
 const invitedRouter = require('./routes/api/invited')
 const deleteRegainRouter = require('./routes/api/delete-regain')
+const resultsRouter = require('./routes/api/results')
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(groupManagementRouter)
 app.use(registerLoginRouter)
 app.use(invitedRouter)
 app.use(deleteRegainRouter)
+app.use(resultsRouter)
 
 const port = process.env.PORT || 5000;
 
