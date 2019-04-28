@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const keys = require('../../config/keys')
 const passport = require('passport')
-const {sendInvitationEmail, sendGoodbyeEmail} = require('../../emails/account')
+const {sendInvitationEmail} = require('../../emails/account')
 const r2 = require("r2");
 
 //Load member model
