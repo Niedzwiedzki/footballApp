@@ -76,6 +76,7 @@ router.post('/newgroup', passport.authenticate('jwt', {session: false}), async (
         await newGroup.save()
         await admin.save()
         //Invite Friends
+        console.log(to)
         if(newGroup.invitedFriends.length > 0){
             await sendInvitationEmail(to, req.body.name, newGroup._id)
         }
@@ -109,7 +110,7 @@ router.post('/invitenewmembers', passport.authenticate('jwt', {session: false}),
         if(memberAlreadyIn.length > 0){
             return res.status(400).json({group: `${memberAlreadyIn.toString().replace(',', ' and ')} already in group`})
         }
-
+        console.log(to)
         await sendInvitationEmail(to, req.body.name, group._id)
         group.invitedFriends = group.invitedFriends.concat(to)
         await group.save();
