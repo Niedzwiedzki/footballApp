@@ -32,6 +32,7 @@ router.get('/shownextmatches', passport.authenticate('jwt', {session: false}), a
         const scheduledMatches = group.matches.filter(match => {
             return match.status === "SCHEDULED"
         })
+        // show your predictions
         scheduledMatches.forEach(match => {
             searchedMember.bets.forEach(bet => {
                 if(match.id == bet.id){
@@ -73,7 +74,7 @@ router.get('/showfinishedmatches', passport.authenticate('jwt', {session: false}
         const finishedMatches = group.matches.filter(match => {
             return match.status === "FINISHED"
         })
-
+        // show your predictions
         finishedMatches.forEach(match => {
             searchedMember.bets.forEach(bet => {
                 if(match.id == bet.id){

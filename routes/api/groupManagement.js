@@ -16,7 +16,6 @@ const Group = require('../../models/Group')
 // @access  Private
 router.get('/availablecompetitions', passport.authenticate('jwt', {session: false}), async (req, res) => {
     const url = 'http://api.football-data.org/v2/competitions'
-    // const url = 'http://api.football-data.org/v2/competitions'
     const headers = keys.footballAPIToken
     const availableCompetitions = []
     try {

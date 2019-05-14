@@ -1,0 +1,145 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-image:linear-gradient(to right, rgb(0, 0, 0), rgb(0, 0, 0), rgb(255,255,255));
+  color: rgb(255,255,255);
+  height: 100%;
+}
+
+#ball{
+    animation-name: rotation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
+@keyframes rotation {
+    from {-ms-transform: rotate(0deg); /* IE 9 */
+        -webkit-transform: rotate(0deg); /* Safari */
+        transform: rotate(0deg);}
+    to {-ms-transform: rotate(360deg); /* IE 9 */
+        -webkit-transform: rotate(360deg); /* Safari */
+        transform: rotate(360deg);}
+  }
+
+  .not-active{
+    pointer-events: none;
+  }
+
+  hr {
+    border: 1px solid rgb(255,255,255);
+    border-radius: 2px; 
+  }
+  
+  .flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+  
+  
+ .flex-container > div {
+  background-color: rgb(255,255,255);
+  color: rgb(0,0,0);
+  width: 200px;
+  margin: 10px;
+  text-align: center;
+  line-height: 75px;
+  font-size: 20px;
+  box-shadow: -5px 5px 40px rgb(255, 255, 255);
+}
+
+ .flex-container > div:hover{
+  position: relative;
+  left: 5px;
+  bottom: 5px;
+  box-shadow: -20px 20px 40px rgb(255, 255, 255);
+ }
+ 
+ .space {
+	margin-top: 20px; 
+	margin-bottom: 20px;
+}
+
+.height-full{
+  height: 100%;
+}
+
+.height-lg{
+  min-height: 80%;
+}
+
+.height-sm{
+  min-height: 10%;
+}
+
+.list-group{
+  margin-top: 20px;
+}
+
+.members li {
+  background-color: transparent;
+  border: 1px solid rgb(255, 255, 255);
+}
+ 
+
+.members li:hover{
+  background-color: rgba(255, 255, 255, 0.5)
+}
+
+  li.selected{
+  background-color: rgba(0,	123,	255, 0.5);
+}
+
+.matches li{
+  border-radius: 5px;
+}
+
+.width-sm{
+  width: 20%;
+}
+
+.width-md{
+  width: 30%;
+}
+
+.width-mdplus{
+  width: 35%;
+}
+
+.width-lg{
+  width: 40%;
+}
+
+.width-fl{
+  width: 100%;
+}
+
+.column-layout div{
+  float: left;
+  text-align: center;
+}
+
+.column-layout input {
+  width: 35px;
+  height: 35px;
+  text-align: center;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+.matchesToPlay li {
+  padding-right: 0;
+  padding-left: 0; 
+}
