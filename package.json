@@ -9,6 +9,11 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
+  "nodemonConfig": {
+    "ignore": [
+      "competitions/*"
+    ]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
