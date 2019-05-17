@@ -34,13 +34,13 @@ const updateJSONfiles = () => {
       if (matches !== undefined) {
         json.matches.forEach(match => {
           if (match.status == 'SCHEDULED') {
-            scheduledMatches.push(match);
+            scheduledMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
           } else if (match.status == 'FINISHED') {
-            finishedMatches.push(match);
+            finishedMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
           } else if (match.status == 'IN_PLAY') {
-            in_playMatches.push(match);
+            in_playMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
           } else {
-            elseMatches.push(match);
+            elseMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
           }
         });
       } else {
@@ -70,3 +70,4 @@ const updateJSONfiles = () => {
 };
 
 module.exports = updateJSONfiles;
+

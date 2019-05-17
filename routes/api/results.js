@@ -142,7 +142,6 @@ router.post(
           .status(400)
           .json({ group: 'You cannot bet for finished matches' });
       }
-      console.log(scheduledMatches);
       await group.markModified('members');
       await group.save();
       res.send(group);
