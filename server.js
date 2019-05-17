@@ -8,8 +8,10 @@ const registerLoginRouter = require('./routes/api/register-login');
 const invitedRouter = require('./routes/api/invited');
 const deleteRegainRouter = require('./routes/api/delete-regain');
 const resultsRouter = require('./routes/api/results');
-const updateJSONfiles = require('./updateJSONfiles/updateJSONfiles');
-updateJSONfiles();
+const updateJSONfiles = require('./jsonManagement/updateJSONfiles');
+setInterval(() => {
+  updateJSONfiles();
+}, 180000);
 
 const app = express();
 
