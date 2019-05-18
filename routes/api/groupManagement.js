@@ -126,11 +126,14 @@ router.post(
         admin: req.user._id,
         name: req.body.name
       });
+
       if (!group) {
         return res.status(400).json({ group: 'this group do not exist' });
       }
+      console.log(group.members)
       // checking if new users are already in group
       const memberAlreadyIn = [];
+
       await group.members.forEach(e1 =>
         to.forEach(e2 => {
           if (e1.email === e2) {
@@ -140,13 +143,7 @@ router.post(
       );
 
       if (memberAlreadyIn.length > 0) {
-        return res
-          .status(400)
-          .json({
-            group: `${memberAlreadyIn
-              .toString()
-              .replace(',', ' and ')} already in group`
-          });
+        return res.status(400).json({ group: `${memberAlreadyIn.toString().replace(',', ' and ')} already in group` });
       }
       console.log(to);
       await sendInvitationEmail(to, req.body.name, group._id);

@@ -47,19 +47,19 @@ const updateJSONfiles = () => {
         console.log(`${competition} isn't available`);
       }
       await fs.writeFileSync(
-        `./competitions/${competition}/else.json`,
+        `./competitions/_${competition}/else.json`,
         JSON.stringify(elseMatches)
       );
       await fs.writeFileSync(
-        `./competitions/${competition}/finished.json`,
+        `./competitions/_${competition}/finished.json`,
         JSON.stringify(finishedMatches)
       );
       await fs.writeFileSync(
-        `./competitions/${competition}/in_play.json`,
+        `./competitions/_${competition}/in_play.json`,
         JSON.stringify(in_playMatches)
       );
       await fs.writeFileSync(
-        `./competitions/${competition}/scheduled.json`,
+        `./competitions/_${competition}/scheduled.json`,
         JSON.stringify(scheduledMatches)
       );
     } catch (e) {

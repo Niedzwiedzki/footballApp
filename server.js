@@ -9,12 +9,12 @@ const invitedRouter = require('./routes/api/invited');
 const deleteRegainRouter = require('./routes/api/delete-regain');
 const resultsRouter = require('./routes/api/results');
 const updateJSONfiles = require('./jsonManagement/updateJSONfiles');
-const { updateResults } = require('./jsonManagement/updateResults');
+const { updateResults, verifyOldResults } = require('./jsonManagement/updateResults');
 setInterval(() => {
   updateJSONfiles();
-}, 180000);
+}, 1800000);
 
-updateResults();
+verifyOldResults();
 
 
 

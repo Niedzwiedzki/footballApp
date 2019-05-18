@@ -7,7 +7,7 @@ const GroupSchema = new Schema({
     required: true
   },
   competitionId: {
-    type: Number,
+    type: String,
     required: true
   },
   admin: {

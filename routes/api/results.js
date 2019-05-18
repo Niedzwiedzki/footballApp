@@ -128,20 +128,18 @@ router.post(
           return member.bets.push(predictions);
         }
       });
+
       if (!membership) {
-        return res
-          .status(400)
-          .json({ group: 'You are not a member of this group' });
+        return res.status(400).json({ group: 'You are not a member of this group' });
       }
-      const scheduledMatches = fs.readFileSync(
-        `./competitions/${group.competitionId}/scheduled.json`,
-        'utf8'
-      );
+      const scheduledMatches = fs.readFileSync(`./competitions/_${group.competitionId}/scheduled.json`, 'utf8');
+
       if (!scheduledMatches.includes(predictions.id)) {
         return res
           .status(400)
           .json({ group: 'You cannot bet for finished matches' });
       }
+
       await group.markModified('members');
       await group.save();
       res.send(group);
