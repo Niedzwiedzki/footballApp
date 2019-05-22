@@ -81,11 +81,6 @@ router.post(
         return res.status(400).json({ group: 'group already exists' });
       }
 
-      // matches added to the group - right now it is an obsolete function
-
-      // const response = await r2(url, {headers}).response;
-      // const json = await response.json()
-      // const matches = json.matches
 
       const newGroup = new Group({
         competitionId: req.body.competitionId,

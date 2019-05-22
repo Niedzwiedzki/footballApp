@@ -9,49 +9,48 @@ const Group = require('../../models/Group');
 // @route   POST /invitenewmembers
 // @desc    invite new member
 // @access  Private
-router.get(
-  '/shownextmatches',
-  passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    const groupId = req.body.group;
-    try {
-      const group = await Group.findById(groupId);
-      if (!group) {
-        return res.status(400).json({ group: 'this group do not exist' });
-      }
-
-      //check membership
-      let membership = false;
-      let searchedMember;
-      group.members.forEach(member => {
-        if (member._id.toString() === req.user._id.toString()) {
-          searchedMember = member;
-          return (membership = true);
-        }
-      });
-      if (!membership) {
-        return res
-          .status(400)
-          .json({ group: 'You are not a member of this group' });
-      }
-
-      const scheduledMatches = group.matches.filter(match => {
-        return match.status === 'SCHEDULED';
-      });
-      // show your predictions
-      scheduledMatches.forEach(match => {
-        searchedMember.bets.forEach(bet => {
-          if (match.id == bet.id) {
-            match.yourPrediction = bet;
-          }
-        });
-      });
-
-      res.send(scheduledMatches);
-    } catch (e) {
-      res.status(400).send(e);
+router.get('/shownextmatches', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const groupId = req.body.group;
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(400).json({ group: 'this group do not exist' });
     }
+
+    //check membership
+    let membership = false;
+    let searchedMember;
+    group.members.forEach(member => {
+      if (member._id.toString() === req.user._id.toString()) {
+        searchedMember = member;
+        return (membership = true);
+      }
+    });
+    if (!membership) {
+      return res
+        .status(400)
+        .json({ group: 'You are not a member of this group' });
+    }
+
+    const allMatches = fs.readFileSync(`./competitions/${group.competitionId}/matches.json`, 'utf8')
+    const allMatchesParsed = JSON.parse(allMatches)
+    const scheduledMatches = allMatchesParsed.matches.filter(match => {
+      return match.status === 'SCHEDULED';
+    });
+    // show your predictions
+    // scheduledMatches.forEach(match => {
+    //   searchedMember.bets.forEach(bet => {
+    //     if (match.id == bet.id) {
+    //       match.yourPrediction = bet;
+    //     }
+    //   });
+    // });
+
+    res.send(scheduledMatches);
+  } catch (e) {
+    res.status(400).send(e);
   }
+}
 );
 
 // @route   GET /showfinishedmatches
@@ -81,17 +80,21 @@ router.get(
           .status(400)
           .json({ group: 'You are not a member of this group' });
       }
-      const finishedMatches = group.matches.filter(match => {
+
+      const allMatches = fs.readFileSync(`./competitions/${group.competitionId}/matches.json`, 'utf8')
+      const allMatchesParsed = JSON.parse(allMatches)
+      const finishedMatches = allMatchesParsed.matches.filter(match => {
         return match.status === 'FINISHED';
       });
+
       // show your predictions
-      finishedMatches.forEach(match => {
-        searchedMember.bets.forEach(bet => {
-          if (match.id == bet.id) {
-            match.yourPrediction = bet;
-          }
-        });
-      });
+      // finishedMatches.forEach(match => {
+      //   searchedMember.bets.forEach(bet => {
+      //     if (match.id == bet.id) {
+      //       match.yourPrediction = bet;
+      //     }
+      //   });
+      // });
 
       res.send(finishedMatches);
     } catch (e) {
@@ -109,6 +112,7 @@ router.post(
   async (req, res) => {
     const groupId = req.body.group;
     const predictions = req.body.predictions;
+    predictions.status = "scheduled"
     try {
       const group = await Group.findById(groupId);
       if (!group) {
@@ -132,7 +136,10 @@ router.post(
       if (!membership) {
         return res.status(400).json({ group: 'You are not a member of this group' });
       }
-      const scheduledMatches = fs.readFileSync(`./competitions/_${group.competitionId}/scheduled.json`, 'utf8');
+      const allMatches = fs.readFileSync(`./competitions/_${group.competitionId}/matches.json`, 'utf8');
+      const scheduledMatches = allMatches.matches.filter(match => {
+        return match.status == "SCHEDULED"
+      })
 
       if (!scheduledMatches.includes(predictions.id)) {
         return res

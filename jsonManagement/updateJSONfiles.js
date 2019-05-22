@@ -20,48 +20,23 @@ const updateJSONfiles = () => {
 
   const headers = keys.footballAPIToken;
   availableCompetitions.forEach(async competition => {
-    let elseMatches = [];
-    let finishedMatches = [];
-    let in_playMatches = [];
-    let scheduledMatches = [];
+
 
     let url = `http://api.football-data.org/v2/competitions/${competition}/matches`;
     try {
       let response = await r2(url, { headers }).response;
       let json = await response.json();
-      let matches = json.matches;
+      let matches = json;
 
-      if (matches !== undefined) {
-        json.matches.forEach(match => {
-          if (match.status == 'SCHEDULED') {
-            scheduledMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
-          } else if (match.status == 'FINISHED') {
-            finishedMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
-          } else if (match.status == 'IN_PLAY') {
-            in_playMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
-          } else {
-            elseMatches.push({ id: match.id, result: match.score, homeTeam: match.homeTeam, awayTeam: match.awayTeam, status: match.status });
-          }
-        });
+      if (matches.matches) {
+        await fs.writeFileSync(
+          `./competitions/_${competition}/matches.json`,
+          JSON.stringify(matches)
+        );
       } else {
-        console.log(`${competition} isn't available`);
+        console.log("cannot download data")
       }
-      await fs.writeFileSync(
-        `./competitions/_${competition}/else.json`,
-        JSON.stringify(elseMatches)
-      );
-      await fs.writeFileSync(
-        `./competitions/_${competition}/finished.json`,
-        JSON.stringify(finishedMatches)
-      );
-      await fs.writeFileSync(
-        `./competitions/_${competition}/in_play.json`,
-        JSON.stringify(in_playMatches)
-      );
-      await fs.writeFileSync(
-        `./competitions/_${competition}/scheduled.json`,
-        JSON.stringify(scheduledMatches)
-      );
+
     } catch (e) {
       console.log('error ' + e);
     }
