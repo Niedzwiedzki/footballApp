@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
                     newMember.password = hash;
                     newMember.save()
                         .then(member => res.json(member))
-                        .catch(e => console.log(e))
+                        .catch(e => res.status(400).send(e))
                 })
             })
         }

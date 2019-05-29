@@ -4,20 +4,7 @@ const keys = require('../config/keys');
 const Group = require('../models/Group');
 
 const updateJSONfilesMatchTime = async () => {
-  const availableCompetitions = [
-    2000,
-    2001,
-    2002,
-    2003,
-    2013,
-    2014,
-    2015,
-    2016,
-    2017,
-    2018,
-    2019,
-    2021
-  ];
+  const availableCompetitions = [2000, 2001, 2002, 2003, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021];
 
 
   var checkCloseMatches = (match) => {
@@ -89,10 +76,7 @@ const updateJSONfilesMatchTime = async () => {
           await groupToUpdate.markModified('members');
           await groupToUpdate.save();
         })
-
         
-
-
         } else {
           console.log('not updated')
         }

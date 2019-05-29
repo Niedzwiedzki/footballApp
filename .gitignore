@@ -2,3 +2,4 @@ node_modules
 competitions
 client/node_modules
 config/keys.js
+config/testkeys.js

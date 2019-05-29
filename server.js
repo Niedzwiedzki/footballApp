@@ -51,9 +51,11 @@ setInterval(() => {
 setInterval(() => {
   updateJSONfilesMatchTime();
   // console.log(updatedResults)
-}, 1800);
+}, 180000);
 
 
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
+
+module.exports = app;
