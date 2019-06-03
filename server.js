@@ -1,3 +1,6 @@
+const env = process.env.NODE_ENV || 'development'
+
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -19,8 +22,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //DB Config
-const db = require('./config/keys').MONGODB_URL;
+if(env === 'development') {
+  process.env.port = 5000;
+  var db = require('./config/keys').MONGODB_URL;
+} else if (env === 'test') {
+  var db = require('./config/testkeys').MONGODB_URL;
+  process.env.port = 5000;
+}
 
+
+// const db = require('./config/keys').MONGODB_URL;
 //Connect to MongoDB
 mongoose
   .connect(db, { useNewUrlParser: true })

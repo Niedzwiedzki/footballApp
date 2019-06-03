@@ -88,7 +88,6 @@ router.post(
         admin: req.user._id,
         invitedFriends: to,
         members: newMember
-        // matches
       });
 
       const admin = await Member.findById(req.user.id);

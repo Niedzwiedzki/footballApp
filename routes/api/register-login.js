@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
         if(isMatch){
             //Member matched
 
-            const payload = { id: member.id, mamber: member.name } // create JWT payload
+            const payload = { id: member.id, member: member.name } // create JWT payload
 
             //Sign Token
             const token = await jwt.sign(payload, keys.secretOrKey, {expiresIn: "12h"});
