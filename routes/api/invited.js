@@ -20,15 +20,14 @@ router.post('/login/:id', async (req, res) => {
 
     try {
         const group = await Group.findById(req.params.id)
-        console.log(group)
-        group.members.forEach((member) => {if(member.email === email){
-            userAlreadyIn.push(email)
-        }})
         if(!group) {
             return res.status(400).json({group: 'this group do not exist'})
         }
+        group.members.forEach((member) => {if(member.email === email){
+            userAlreadyIn.push(email)
+        }})
         if (userAlreadyIn.length > 0){
-            return res.status(400).json({group: 'You are already member if this group'}) 
+            return res.status(400).json({group: 'You are already member of this group'}) 
         }
         if (!group.invitedFriends.includes(email)){
             return res.status(400).json({group: 'You are not invited to join this group'}) 
@@ -84,14 +83,17 @@ router.post('/register/:id', async (req, res) => {
 
     try {
         const group = await Group.findById(req.params.id)
-        group.members.forEach((member) => {if(member.email === email){
-            userAlreadyIn.push(email)
-        }})
+
         if(!group) {
             return res.status(400).json({group: 'this group do not exist'})
         }
+
+        group.members.forEach((member) => {if(member.email === email){
+            userAlreadyIn.push(email)
+        }})
+
         if (userAlreadyIn.length > 0){
-            return res.status(400).json({group: 'You are already member if this group'}) 
+            return res.status(400).json({group: 'You are already member of this group'}) 
         }
         if (!group.invitedFriends.includes(email)){
             return res.status(400).json({group: 'You are not invited to join this group'}) 

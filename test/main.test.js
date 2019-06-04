@@ -1,7 +1,8 @@
 const Member = require('../models/Member')
 const Group = require('../models/Group')
-const {register_login} = require('./register-login')
-const {groupManagement} = require('./groupManagement')
+const {register_login} = require('./testingRoutes/register-login')
+const {groupManagement} = require('./testingRoutes/groupManagement')
+const {invited} = require('./testingRoutes/invited')
 
 const testMembers = [{
     "memberGroups": [],
@@ -14,13 +15,23 @@ const testMembers = [{
 },
 {
     "memberGroups": [],
-    "adminGroups": [],
+    "adminGroups": ["5cf38839ae919f21b0710547"],
     "_id": "5cf3878dfc9fea2f9c7bb10f",
     "name": "Jakub",
     "email": "kuban@op.pl",
     "password": "$2a$10$AzlNijOYA./oJ/r7IfXYBOHN2uNxj98W4XxxyONPJ995fYaLHC4za",
     "__v": 0
-}]
+},
+{
+    "memberGroups": [],
+    "adminGroups": [],
+    "_id": "5cf3878dfc9fea2f9d8bb107",
+    "name": "kubs",
+    "email": "jakub.niedzwiedzki1990@gmail.com",
+    "password": "$2a$10$.cgmpEvjN/ytI09Pa8UNFeQ5M1suSjfUzHCZY6ZYtfH25vlt/o.5G",
+    "__v": 0
+}
+]
 
 beforeEach((done) => {
     Member.deleteMany({}).then(() => {
@@ -28,12 +39,18 @@ beforeEach((done) => {
     }).then(() => {
         Group.deleteMany({}).then(() => {
             let group = {
-                "invitedFriends": [],
+                "invitedFriends": ['jakub.niedzwiedzki1990@gmail.com', 'jakubtest.niedzwiedzkitest1990@gmail.com'],
                 "members": [
                     {
                         "name": "Jakub",
                         "email": "kuban@op.pl",
                         "_id": "5cf3878dfc9fea2f9c7bb10f",
+                        "bets": []
+                    },
+                    {
+                        "name": "Tomek",
+                        "email": "aaaaaa@op.pl",
+                        "_id": "5cf3878dfc9fea2f9c8bb10l",
                         "bets": []
                     }
                 ],
@@ -50,3 +67,4 @@ beforeEach((done) => {
 
 register_login()
 groupManagement()
+invited()

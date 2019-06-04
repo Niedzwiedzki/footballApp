@@ -1,7 +1,7 @@
 exports.register_login = function() {
     const expect = require('expect');
     const request = require('supertest')
-    const { app } = require('../server');
+    const { app } = require('../../server');
 
     describe('member testing', () => {
         it('should register a new member', (done) => {
@@ -14,10 +14,8 @@ exports.register_login = function() {
                 .post('/register')
                 .send(member)
                 .expect(200)
-                .expect((res) => {
-                    expect(res.body.name).toBe('chuj')
-                })
                 .end((err, res) => {
+                    expect(res.body.name).toBe('chuj')
                     if (err) {
                         return done(err)
                     }
@@ -44,7 +42,7 @@ exports.register_login = function() {
                         return done(err)
                     }
                     Member.find().then((members) => {
-                        expect(members.length).toBe(2);
+                        expect(members.length).toBe(3);
                         done();
                     }).catch((e) => done(e))
                 })
@@ -65,7 +63,7 @@ exports.register_login = function() {
                         return done(err)
                     }
                     Member.find().then((members) => {
-                        expect(members.length).toBe(2);
+                        expect(members.length).toBe(3);
                         done();
                     }).catch((e) => done(e))
                 })
@@ -80,10 +78,9 @@ exports.register_login = function() {
                 .post('/login')
                 .send(member)
                 .expect(200)
-                .expect((res) => {
-                    expect(res.body.success).toBe(true)
-                })
+                    
                 .end((err, res) => {
+                    expect(res.body.success).toBe(true)
                     if (err) {
                         return done(err)
                     }
@@ -101,10 +98,8 @@ exports.register_login = function() {
                 .post('/login')
                 .send(member)
                 .expect(400)
-                .expect((res) => {
-                    expect(res.body.password).toBe("Password incorrect")
-                })
                 .end((err, res) => {
+                    expect(res.body.password).toBe("Password incorrect")
                     if (err) {
                         return done(err)
                     }
