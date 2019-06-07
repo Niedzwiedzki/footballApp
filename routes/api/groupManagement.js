@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const keys = require('../../config/keys');
+// const keys = require('../../config/keys');
 const passport = require('passport');
 const { sendInvitationEmail } = require('../../emails/account');
-const r2 = require('r2');
+const fs = require('fs');
 
 //Load member model
 const Member = require('../../models/Member');
@@ -16,19 +16,19 @@ router.get(
   '/availablecompetitions',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const url = 'http://api.football-data.org/v2/competitions';
-    const headers = keys.footballAPIToken;
     const availableCompetitions = [];
-    try {
-      const response = await r2(url, { headers }).response;
-      const json = await response.json();
-      json.competitions.forEach(competition =>
-        availableCompetitions.push(competition.id, competition.name)
-      );
-      res.send(availableCompetitions);
-    } catch (e) {
-      res.send(e);
-    }
+    const competitions = fs.readdirSync('competitions')
+    competitions.forEach(competition => {
+      new Promise((resolve, reject) => {
+          let competitionDataRaw = fs.readFileSync(`competitions/${competition}/matches.json`);
+          let competitionDataJSON = JSON.parse(competitionDataRaw)
+          availableCompetitions.push(competitionDataJSON.competition.id, competitionDataJSON.competition.name)
+          resolve();
+    })
+    })
+
+    res.send(availableCompetitions);
+
   }
 );
 
@@ -41,8 +41,6 @@ router.post(
   async (req, res) => {
     const to = req.body.invitedFriends;
     const competitionId = req.body.competitionId;
-    const url = `http://api.football-data.org/v2/competitions/${competitionId}/matches`;
-    const headers = keys.footballAPIToken;
 
     //Checking for availability of competition - limited access
     const availableCompetitions = [
@@ -57,7 +55,8 @@ router.post(
       2017,
       2018,
       2019,
-      2021
+      2021,
+      3000
     ];
     if (!availableCompetitions.includes(competitionId)) {
       return res
@@ -69,7 +68,8 @@ router.post(
       name: req.user.name,
       email: req.user.email,
       _id: req.user._id,
-      bets: []
+      bets: [],
+      results: {}
     };
 
     try {

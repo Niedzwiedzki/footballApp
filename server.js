@@ -12,8 +12,10 @@ const invitedRouter = require('./routes/api/invited');
 const deleteRegainRouter = require('./routes/api/delete-regain');
 const resultsRouter = require('./routes/api/results');
 const updateJSONfiles = require('./jsonManagement/updateJSONfiles');
-const { updateResults, verifyOldResults } = require('./jsonManagement/updateResults');
 const updateJSONfilesMatchTime = require('./jsonManagement/updateJSONfilesMatchTime');
+
+//for test
+const TestUpdateJSONMatchTime = require('./jsonManagement/TestUpdateJSONMatchTime');
 
 const app = express();
 
@@ -56,14 +58,13 @@ setInterval(() => {
   updateJSONfiles();
 }, 86400000);
 
-// updateResults();
-
 
 setInterval(() => {
   updateJSONfilesMatchTime();
   // console.log(updatedResults)
-}, 180000);
+}, 1800000);
 
+// TestUpdateJSONMatchTime()
 
 const port = process.env.PORT || 5000;
 

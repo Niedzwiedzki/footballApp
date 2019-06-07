@@ -42,7 +42,10 @@ exports.register_login = function() {
                         return done(err)
                     }
                     Member.find().then((members) => {
-                        expect(members.length).toBe(3);
+                        expect(members[0].name).toBe("Kuba3");
+                        expect(members[1].name).toBe("Jakub");
+                        expect(members[2].name).toBe("kubs");
+                        expect(members[3].name).toBe("Tomek");
                         done();
                     }).catch((e) => done(e))
                 })
@@ -63,7 +66,10 @@ exports.register_login = function() {
                         return done(err)
                     }
                     Member.find().then((members) => {
-                        expect(members.length).toBe(3);
+                        expect(members[0].name).toBe("Kuba3");
+                        expect(members[1].name).toBe("Jakub");
+                        expect(members[2].name).toBe("kubs");
+                        expect(members[3].name).toBe("Tomek");
                         done();
                     }).catch((e) => done(e))
                 })

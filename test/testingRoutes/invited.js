@@ -2,8 +2,6 @@ exports.invited = function (token) {
     const expect = require('expect');
     const request = require('supertest')
     const { app } = require('../../server');
-    const jwt = require('jsonwebtoken')
-    const keys = require('../../config/testkeys')
 
     describe('invited testing', () => {
         it('should not accept not invited user (login)', (done) => {
@@ -22,7 +20,10 @@ exports.invited = function (token) {
                         if (err) {
                             return done(err)
                         }
-                        done()
+                        Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                            expect(group.members.length).toBe(2);
+                            done();
+                        }).catch((e) => done(e))
                     })
             })
 
@@ -43,7 +44,10 @@ exports.invited = function (token) {
                         if (err) {
                             return done(err)
                         }
-                        done()
+                        Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                            expect(group.members.length).toBe(2);
+                            done();
+                        }).catch((e) => done(e))
                     })
             })
 
@@ -64,7 +68,10 @@ exports.invited = function (token) {
                         if (err) {
                             return done(err)
                         }
-                        done()
+                        Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                            expect(group.members.length).toBe(2);
+                            done();
+                        }).catch((e) => done(e))
                     })
             })
 
@@ -85,7 +92,10 @@ exports.invited = function (token) {
                         if (err) {
                             return done(err)
                         }
-                        done()
+                        Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                            expect(group.members.length).toBe(2);
+                            done();
+                        }).catch((e) => done(e))
                     })
             })
 
@@ -105,7 +115,10 @@ exports.invited = function (token) {
                         if (err) {
                             return done(err)
                         }
-                        done()
+                        Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                            expect(group.members.length).toBe(3);
+                            done();
+                        }).catch((e) => done(e))
                     })
             })
 
@@ -126,7 +139,10 @@ exports.invited = function (token) {
                         if (err) {
                             return done(err)
                         }
-                        done()
+                        Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                            expect(group.members.length).toBe(2);
+                            done();
+                        }).catch((e) => done(e))
                     })
             })
             it('should not accept not invited user (register)', (done) => {
@@ -146,7 +162,10 @@ exports.invited = function (token) {
                             if (err) {
                                 return done(err)
                             }
-                            done()
+                            Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                                expect(group.members.length).toBe(2);
+                                done();
+                            }).catch((e) => done(e))
                         })
                 })
 
@@ -168,7 +187,10 @@ exports.invited = function (token) {
                             if (err) {
                                 return done(err)
                             }
-                            done()
+                            Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                                expect(group.members.length).toBe(2);
+                                done();
+                            }).catch((e) => done(e))
                         })
                 })
 
@@ -189,7 +211,10 @@ exports.invited = function (token) {
                             if (err) {
                                 return done(err)
                             }
-                            done()
+                            Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                                expect(group.members.length).toBe(2);
+                                done();
+                            }).catch((e) => done(e))
                         })
                 })
 
@@ -211,7 +236,10 @@ exports.invited = function (token) {
                             if (err) {
                                 return done(err)
                             }
-                            done()
+                            Group.findById('5cf38839ae919f21b0710547').then((group) => {
+                                expect(group.members.length).toBe(3);
+                                done();
+                            }).catch((e) => done(e))
                         })
                 })
 

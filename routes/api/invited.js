@@ -53,7 +53,8 @@ router.post('/login/:id', async (req, res) => {
                 "name" : member.name,
                 "email" : member.email,
                 "_id" : member._id,
-                "bets" : []
+                "bets" : [],
+                "results": {}
             })
 
             member.memberGroups.push(group._id)
@@ -120,7 +121,8 @@ router.post('/register/:id', async (req, res) => {
                             "name" : member.name,
                             "email" : member.email,
                             "_id" : member._id,
-                            "bets" : []
+                            "bets" : [],
+                            "results": {}
                         })
                         group.save()
                             .then(group => res.json(group.members))

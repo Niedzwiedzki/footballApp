@@ -1,39 +1,28 @@
 const fs = require('fs');
-const r2 = require('r2');
-const keys = require('../config/keys');
 const Group = require('../models/Group');
 
-const updateJSONfilesMatchTime = async () => {
-  const availableCompetitions = [2000, 2001, 2002, 2003, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021];
+const TestUpdateJSONMatchTime = async () => {
+  // const availableCompetitions = [2000, 2001, 2002, 2003, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2021];
 
+  // var checkCloseMatches = (match) => {
+  //   let matchDate = new Date(match.utcDate);
+  //   let currentDate = new Date()
+  //   let timeDifference = matchDate.getTime() - currentDate.getTime()
+  //   return timeDifference < 600000 && match.status != "FINISHED" && match.status != "AWARDED"
+  // }
+  // const headers = keys.footballAPIToken;
 
-  var checkCloseMatches = (match) => {
-    let matchDate = new Date(match.utcDate);
-    let currentDate = new Date()
-    let timeDifference = matchDate.getTime() - currentDate.getTime()
-    return timeDifference < 600000 && match.status != "FINISHED" && match.status != "AWARDED"
-  }
-  const headers = keys.footballAPIToken;
-
-  availableCompetitions.forEach(async competition => {
-    let oneCompetition = fs.readFileSync(`./competitions/_${competition}/matches.json`, 'utf8')
-    let competitionJSON = JSON.parse(oneCompetition)
-    let currentMatches = competitionJSON.matches.filter(checkCloseMatches)
-    if (currentMatches.length > 0) {
-      let url = `http://api.football-data.org/v2/competitions/${competition}/matches`;
+  // availableCompetitions.forEach(async competition => {
+    // let oneCompetition = fs.readFileSync(`./competitions/_${competition}/matches.json`, 'utf8')
+    // let competitionJSON = JSON.parse(oneCompetition)
+    // let currentMatches = competitionJSON.matches.filter(checkCloseMatches)
+    // if (currentMatches.length > 0) {
+      // let url = `http://api.football-data.org/v2/competitions/${competition}/matches`;
       try {
-        let response = await r2(url, { headers }).response;
-        let json = await response.json();
-        let matches = json;
-        if (matches.matches) {
-          await fs.writeFileSync(
-            `./competitions/_${competition}/matches.json`,
-            JSON.stringify(matches)
-          );
-        const groups = await Group.find({competitionId: competition});
+        let json = fs.readFileSync(`competitions/_3000/matches.json`);
+        let matches = JSON.parse(json);
+        const groups = await Group.find({competitionId: "3000"});
         groups.forEach(async group => {
-
-
           let groupToUpdate = await Group.findById(group._id);
           groupToUpdate.members.forEach(member => {
             member.bets.forEach(bet => {
@@ -71,22 +60,17 @@ const updateJSONfilesMatchTime = async () => {
               }
             })
           })
-      
-          console.log(groupToUpdate)
           await groupToUpdate.markModified('members');
           await groupToUpdate.save();
         })
         
-        } else {
-          console.log('not updated')
-        }
       } catch (e) {
         console.log('error ' + e);
       }
-    }
+    // }
 
-  });
+  // });
 
 };
 
-module.exports = updateJSONfilesMatchTime;
+module.exports = TestUpdateJSONMatchTime;

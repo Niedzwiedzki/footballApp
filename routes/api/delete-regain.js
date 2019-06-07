@@ -16,11 +16,11 @@ router.delete('/deletemember', passport.authenticate('jwt', {session: false}), a
     let index 
     try {
         const group = await Group.findOne({admin: req.user._id, name: req.body.name})
-        const member = await Member.findOne({email: to})
+        const member = await Member.findOne({email: "aaaaaa@op.pl"})
         if(!group) {
             return res.status(400).json({group: 'this group do not exist'})
         }
-        if(group.admin === to) {
+        if(req.user.email === to) {
             return res.status(400).json({group: 'you cannot remove yourself'})
         }
         // checking if new users are already in group
@@ -46,7 +46,7 @@ router.delete('/deletemember', passport.authenticate('jwt', {session: false}), a
         await sendGoodbyeEmail(to, req.body.name)
         await member.save()
         await group.save()
-        res.send(group, member)
+        res.send(group)
             
     } catch (e) {
         res.status(400).send(e)

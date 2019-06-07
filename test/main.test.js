@@ -3,6 +3,7 @@ const Group = require('../models/Group')
 const {register_login} = require('./testingRoutes/register-login')
 const {groupManagement} = require('./testingRoutes/groupManagement')
 const {invited} = require('./testingRoutes/invited')
+const {delete_regain} = require('./testingRoutes/delete-regain')
 
 const testMembers = [{
     "memberGroups": [],
@@ -29,6 +30,15 @@ const testMembers = [{
     "name": "kubs",
     "email": "jakub.niedzwiedzki1990@gmail.com",
     "password": "$2a$10$.cgmpEvjN/ytI09Pa8UNFeQ5M1suSjfUzHCZY6ZYtfH25vlt/o.5G",
+    "__v": 0
+},
+{
+    "memberGroups": ["5cf38839ae919f21b0710547"],
+    "adminGroups": [],
+    "_id": "5cf6e9a81871021df0df88e7",
+    "name": "Tomek",
+    "email": "aaaaaa@op.pl",
+    "password": "$2a$10$j6R6ZHnhQaWSl0jO8NatCeEHHk0F0dBPKdnk2wB.gna/WFMYHufKu",
     "__v": 0
 }
 ]
@@ -68,3 +78,4 @@ beforeEach((done) => {
 register_login()
 groupManagement()
 invited()
+delete_regain()

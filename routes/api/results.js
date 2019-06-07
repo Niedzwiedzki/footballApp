@@ -31,8 +31,8 @@ router.get('/shownextmatches', passport.authenticate('jwt', { session: false }),
         .status(400)
         .json({ group: 'You are not a member of this group' });
     }
-
-    const allMatches = fs.readFileSync(`./competitions/${group.competitionId}/matches.json`, 'utf8')
+    console.log('ok')
+    const allMatches = fs.readFileSync(`./competitions/_${group.competitionId}/matches.json`, 'utf8')
     const allMatchesParsed = JSON.parse(allMatches)
     const scheduledMatches = allMatchesParsed.matches.filter(match => {
       return match.status === 'SCHEDULED';
@@ -81,7 +81,7 @@ router.get(
           .json({ group: 'You are not a member of this group' });
       }
 
-      const allMatches = fs.readFileSync(`./competitions/${group.competitionId}/matches.json`, 'utf8')
+      const allMatches = fs.readFileSync(`./competitions/_${group.competitionId}/matches.json`, 'utf8')
       const allMatchesParsed = JSON.parse(allMatches)
       const finishedMatches = allMatchesParsed.matches.filter(match => {
         return match.status === 'FINISHED';
@@ -132,21 +132,20 @@ router.post(
           return member.bets.push(predictions);
         }
       });
-
       if (!membership) {
         return res.status(400).json({ group: 'You are not a member of this group' });
       }
       const allMatches = fs.readFileSync(`./competitions/_${group.competitionId}/matches.json`, 'utf8');
-      const scheduledMatches = allMatches.matches.filter(match => {
-        return match.status == "SCHEDULED"
+      const parsedMatches = JSON.parse(allMatches)
+      const scheduledMatches = parsedMatches.matches.filter(match => {
+        return match.status == "SCHEDULED" && match.id == predictions.id
       })
-
-      if (!scheduledMatches.includes(predictions.id)) {
+      if (!scheduledMatches) {
         return res
           .status(400)
           .json({ group: 'You cannot bet for finished matches' });
       }
-
+      
       await group.markModified('members');
       await group.save();
       res.send(group);

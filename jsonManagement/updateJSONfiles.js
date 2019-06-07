@@ -15,7 +15,8 @@ const updateJSONfiles = () => {
     2017,
     2018,
     2019,
-    2021
+    2021,
+    3000
   ];
 
   const headers = keys.footballAPIToken;
@@ -27,12 +28,47 @@ const updateJSONfiles = () => {
       let response = await r2(url, { headers }).response;
       let json = await response.json();
       let matches = json;
-
       if (matches.matches) {
         await fs.writeFileSync(
           `./competitions/_${competition}/matches.json`,
           JSON.stringify(matches)
         );
+
+          
+        const groups = await Group.find({competitionId: competition});
+        groups.forEach(async group => {
+          let groupToUpdate = await Group.findById(group._id);
+          groupToUpdate.members.forEach(member => {
+            member.bets.forEach(bet => {
+              if (bet.status == 'finished') {
+                let relatedMatch = matches.matches.filter((match) => {
+                  return match.id == bet.id
+                })
+                if (relatedMatch.length > 0 && relatedMatch[0].status == "FINISHED") {
+                  let relatedMatchResult = relatedMatch[0].score.fullTime
+                  //veryfing winner
+                  let winnerReal = relatedMatchResult.homeTeam - relatedMatchResult.awayTeam
+                  let winnerBet = bet.homeTeam - bet.awayTeam
+                  let result;
+                  if (bet.homeTeam == relatedMatchResult.homeTeam && bet.awayTeam == relatedMatchResult.awayTeam) {
+                    result = 3;
+                  } else if ((winnerReal > 0 && winnerBet > 0) || (winnerReal < 0 && winnerBet < 0) || (winnerReal == 0 && winnerBet == 0)) {
+                    result = 1;
+                  } else {
+                    result = 0;
+                  }
+                  member.results[relatedMatch[0].id] = {homeTeam: bet.homeTeam, awayTeam: bet.awayTeam, status: relatedMatch[0].status, score: result}
+                }
+              }
+            })
+          })
+          await groupToUpdate.markModified('members');
+          await groupToUpdate.save();
+        })
+
+
+
+
       } else {
         console.log("cannot download data")
       }

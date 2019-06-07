@@ -6,26 +6,28 @@ exports.groupManagement = function (token) {
     const keys = require('../../config/testkeys')
 
     describe('group testing', () => {
-        it('should get available competitions', (done) => {
-            Member.findById('5cf3878dfc9fea2f9c7bb10f').then((member) => {
-                const payload = { id: member.id, member: member.name }
-                const token = jwt.sign(payload, keys.secretOrKey, { expiresIn: "12h" });
-                request(app)
-                    .get('/availablecompetitions')
-                    .set("Authorization", `Bearer ${token}`)
-                    .expect(200)
 
-                    .end((err, res) => {
-                        if (err) {
-                            return done(err)
-                        }
-                            expect(res.body).toBeA(Array)
-                        done()
-                    })
-            })
+        // use only if needed
+        // it('should get available competitions', (done) => {
+        //     Member.findById('5cf3878dfc9fea2f9c7bb10f').then((member) => {
+        //         const payload = { id: member.id, member: member.name }
+        //         const token = jwt.sign(payload, keys.secretOrKey, { expiresIn: "12h" });
+        //         request(app)
+        //             .get('/availablecompetitions')
+        //             .set("Authorization", `Bearer ${token}`)
+        //             .expect(200)
+
+        //             .end((err, res) => {
+        //                 if (err) {
+        //                     return done(err)
+        //                 }
+        //                     expect(res.body).toBeA(Array)
+        //                 done()
+        //             })
+        //     })
 
 
-        })
+        // })
 
 
         it('should not get available competitions', (done) => {
