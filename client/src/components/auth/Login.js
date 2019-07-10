@@ -8,8 +8,10 @@ const Login = () => {
 
   const { loginEmail, loginPassword } = formData;
 
-  const onChange = e =>
+  const onChange = e => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
+    console.log(formData)
+  }
 
   const onSubmit = e => {
     e.preventDefault(e);
@@ -19,7 +21,7 @@ const Login = () => {
   return (
     <div>
       <h3>Log in</h3>
-      <form action="/action_page.php">
+      <form onSubmit={e => onSubmit(e)}>
         <div className="form-group">
           <label>Email address:</label>
           <input

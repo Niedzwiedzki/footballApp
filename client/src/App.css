@@ -143,3 +143,9 @@ input[type=number]::-webkit-outer-spin-button {
   padding-right: 0;
   padding-left: 0; 
 }
+
+.list-group-item button, .list-group-item input {
+  margin: 2px;
+  padding: 0;
+  height: 40px;
+}
