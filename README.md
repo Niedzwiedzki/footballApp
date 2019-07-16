@@ -4,10 +4,10 @@ Home Page:
 ![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/home.PNG)
 
 Dashboard Page:
-![Screenshot](dashboard.png)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/dashboard.PNG)
 
 Groups Page:
-![Screenshot](groups.png)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/groups.PNG)
 
 Mobile Page:
-![Screenshot](mobile.png)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/mobile.PNG)
