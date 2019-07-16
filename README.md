@@ -1,7 +1,7 @@
 # App designed to predict football matches results. 
 
 Home Page:
-![Screenshot](home.png)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/home.PNG)
 
 Dashboard Page:
 ![Screenshot](dashboard.png)
