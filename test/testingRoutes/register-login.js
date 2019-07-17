@@ -6,8 +6,8 @@ exports.register_login = function() {
     describe('member testing', () => {
         it('should register a new member', (done) => {
             let member = {
-                name: "chuj",
-                email: "chuj@chuj.com",
+                name: "test1",
+                email: "test1@test1.com",
                 password: "1954"
             }
             request(app)
@@ -15,14 +15,14 @@ exports.register_login = function() {
                 .send(member)
                 .expect(200)
                 .end((err, res) => {
-                    expect(res.body.name).toBe('chuj')
+                    expect(res.body.name).toBe('test1')
                     if (err) {
                         return done(err)
                     }
     
-                    Member.find({ email: "chuj@chuj.com" }).then((members) => {
+                    Member.find({ email: "test1@test1.com" }).then((members) => {
                         expect(members.length).toBe(1);
-                        expect(members[0].name).toBe("chuj");
+                        expect(members[0].name).toBe("test1");
                         done();
                     }).catch((e) => done(e))
                 })
@@ -30,8 +30,8 @@ exports.register_login = function() {
     
         it('should not register a new member', (done) => {
             let member = {
-                name: "chuj",
-                email: "chuj@chuj.com"
+                name: "test1",
+                email: "test1@test1.com"
             }
             request(app)
                 .post('/register')

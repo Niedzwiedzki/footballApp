@@ -5,23 +5,23 @@ import NewGroupForm from '../group/NewGroupForm'
 
 const Dashboard = () => {
 
-    const [groupData, setFormData] = useState({
+    const [groupData, setGroupData] = useState({
         groups: [
             {
                 name: "Mistrzostwa",
-                id: "asfasd234rq4rf"
+                id: "asfasxcvxcd234rq4rf"
             },
             {
                 name: "Mistrzostwa u Janka",
-                id: "aasd234rq4rf"
+                id: "aasd234rq3214rf"
             },
             {
                 name: "Liga w pracy",
-                id: "asfwwwd234rq4rf"
+                id: "asfwwwd234r434q4rf"
             },
             {
                 name: "Gramy razem",
-                id: "asfwwwd234rq4rf"
+                id: "asfwwwd2d34rq4rf"
             },
             {
                 name: "Champions League",
@@ -31,6 +31,72 @@ const Dashboard = () => {
 
     })
     let { groups } = groupData;
+
+    const [competitionData, setCompetitionData] = useState({
+        competition: [
+            {
+                name: "World Cup",
+                id: "2001"
+            },
+            {
+                name: "Champions League",
+                id: "2002"
+            },
+            {
+                name: "EURO",
+                id: "2003"
+            },
+            {
+                name: "UEFA",
+                id: "2004"
+            },
+            {
+                name: "COPA AMERICA",
+                id: "2006"
+            }
+        ]
+
+    })
+
+    let { competition } = competitionData;
+
+
+
+    const [formData, setFormData] = useState({
+        selectedCompetition: null,
+        invitedFriends: [],
+        newFriend: ''
+    })
+
+    let { selectedCompetition, invitedFriends, newFriend } = formData;
+
+    const selectCompetition = (e) => {
+        setFormData({ ...formData, selectedCompetition: e.target.value })
+    }
+
+    const NewMemberEmail = (e) => {
+        setFormData({ ...formData, newFriend: e.target.value })
+    }
+
+    const addMember = () => {
+        const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const checkEmail = emailPattern.test(String(newFriend).toLowerCase());
+        if (checkEmail){
+            const updatedFriends = invitedFriends;
+            updatedFriends.push({name: newFriend})
+            setFormData({ ...formData, newFriend: '', invitedFriends: updatedFriends})
+        } else {
+            console.log("doesn't work")  
+        }  
+    }
+    const removeFromList = (friend) => {
+        const friendRemoved = invitedFriends.filter(person => {
+            return person.name != friend
+        })
+        setFormData({ ...formData, invitedFriends: friendRemoved})
+    }
+
+
 
     return (
         <Fragment>
@@ -47,7 +113,15 @@ const Dashboard = () => {
                 </div>
                 <hr className="space"/>
                 <button type="button" className="btn btn-primary btn-lg" data-toggle="collapse" data-target="#newgroup">Create new group</button>
-                <NewGroupForm />
+                <NewGroupForm 
+                competitions={competition} 
+                select={selectCompetition} 
+                email={newFriend} 
+                newMember={NewMemberEmail} 
+                add={addMember} 
+                newMembers={invitedFriends}
+                deleteInvitation={removeFromList}
+                />
             </div>
             <div className="col-sm-6">
                 <Ball />

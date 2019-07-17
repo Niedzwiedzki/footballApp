@@ -1,28 +1,73 @@
 import React, { useState } from 'react';
+import Input from '../UI/Input'
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    loginEmail: '',
-    loginPassword: ''
-  });
 
-  const { loginEmail, loginPassword } = formData;
 
   const onChange = e => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-    console.log(formData)
+    const index = inputs.findIndex(input => {
+      return input.inputId == e.target.id
+    })
+
+    const updatedData = {...formData}
+    updatedData.inputs[index].valueInput = e.target.value
+    setFormData({ ...updatedData});
   }
 
   const onSubmit = e => {
     e.preventDefault(e);
-    console.log(formData);
+
+    console.log({email: inputs[0].valueInput, password: inputs[1].valueInput});
   };
+
+    const [formData, setFormData] = useState({
+      inputs: [
+        {
+          styleDiv:"form-group",
+          styleLabel: null,
+          titleLabel: "Email address:",
+          inputId: "loginEmail",
+          inputType: "email", 
+          styleInput: "form-control",
+          valueInput: "",
+          change: onChange
+        },
+        {
+          styleDiv:"form-group",
+          styleLabel: null,
+          titleLabel: "Password:",
+          inputId: "loginPassword",
+          inputType: "password", 
+          styleInput: "form-control",
+          valueInput: "",
+          change: onChange
+        }
+      ]
+    });
+    const { inputs } = formData;
+
+  
 
   return (
     <div>
       <h3>Log in</h3>
       <form onSubmit={e => onSubmit(e)}>
-        <div className="form-group">
+      {
+          inputs.map(function(input){
+              return <Input
+              divClass={input.styleDiv}
+              labelClass={input.styleLabel}
+              label={input.titleLabel}
+              id={input.inputId}
+              type={input.inputType}
+              inputClass={input.styleInput}
+              value={input.valueInput}
+              change={input.change}
+              key={input.inputId}
+              />;
+          })
+      }
+        {/* <div className="form-group">
           <label>Email address:</label>
           <input
             type="email"
@@ -47,7 +92,8 @@ const Login = () => {
             <input className="form-check-input" type="checkbox" /> Remember me
           </label>
         </div>
-        <button type="submit" className="btn btn-primary">
+ */}
+         <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </form>
