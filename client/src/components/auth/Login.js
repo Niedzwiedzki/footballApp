@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Input from '../UI/Input'
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions'
+import * as actionTypes from '../../store/actions/index'
 
 const Login = (state) => {
 
@@ -85,7 +85,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    logIn: () => dispatch({ type: actionTypes.LOGIN })
+    logIn: () => dispatch(actionTypes.login())
   }
 }
 
