@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index'
 
 const Login = (state) => {
-
   const onChange = e => {
     const index = inputs.findIndex(input => {
-      return input.inputId == e.target.id
+      return input.inputId === e.target.id
     })
 
     const updatedData = { ...formData }
@@ -78,7 +77,7 @@ const Login = (state) => {
 };
 const mapStateToProps = state => {
   return {
-    loggedIn: state.loggedIn
+    loggedIn: state.login.loggedIn
   }
 }
 

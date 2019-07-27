@@ -8,7 +8,7 @@ const Register = () => {
 
   const onChange = e => {
     const index = inputs.findIndex(input => {
-      return input.inputId == e.target.id
+      return input.inputId === e.target.id
     })
 
     const updatedData = {...formData}

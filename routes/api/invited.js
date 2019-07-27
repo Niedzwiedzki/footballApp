@@ -57,7 +57,7 @@ router.post('/login/:id', async (req, res) => {
                 "results": {}
             })
 
-            member.memberGroups.push(group._id)
+            member.memberGroups.push({id: group._id, name: group.name})
             
             await member.save()
             await group.save()
@@ -108,7 +108,7 @@ router.post('/register/:id', async (req, res) => {
                 name: name,
                 email: email,
                 password: password, 
-                memberGroups: req.params.id.split()
+                memberGroups: [{id: group._id, name: group.name}]
             });
             // hashing the password
            

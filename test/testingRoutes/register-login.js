@@ -3,6 +3,7 @@ exports.register_login = function() {
     const request = require('supertest')
     const { app } = require('../../server');
 
+
     describe('member testing', () => {
         it('should register a new member', (done) => {
             let member = {
@@ -112,5 +113,6 @@ exports.register_login = function() {
                 })
             done();
         })
+
     })
 }

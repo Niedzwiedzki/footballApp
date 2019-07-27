@@ -92,6 +92,7 @@ router.post(
 
       const admin = await Member.findById(req.user.id);
       admin.adminGroups.push(newGroup._id);
+      admin.memberGroups.push({id: newGroup._id, name: newGroup.name});
 
       await newGroup.save();
       await admin.save();

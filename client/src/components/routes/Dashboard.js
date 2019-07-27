@@ -2,35 +2,16 @@ import React, { Fragment, useState } from 'react';
 import Ball from '../staticElements/Ball'
 import CompetitionGroup from '../group/CompetitionGroup'
 import NewGroupForm from '../group/NewGroupForm'
+import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions/index'
 
-const Dashboard = () => {
+const Dashboard = (state) => {
 
-    const [groupData, setGroupData] = useState({
-        groups: [
-            {
-                name: "Mistrzostwa",
-                id: "asfasxcvxcd234rq4rf"
-            },
-            {
-                name: "Mistrzostwa u Janka",
-                id: "aasd234rq3214rf"
-            },
-            {
-                name: "Liga w pracy",
-                id: "asfwwwd234r434q4rf"
-            },
-            {
-                name: "Gramy razem",
-                id: "asfwwwd2d34rq4rf"
-            },
-            {
-                name: "Champions League",
-                id: "asfwwwd234rq4rf"
-            }
-        ]
+    if(state.groups.length === 0) {
+        state.getGroups()
+    }
+    const yourGroups = state.groups
 
-    })
-    let { groups } = groupData;
 
     const [competitionData, setCompetitionData] = useState({
         competition: [
@@ -91,7 +72,7 @@ const Dashboard = () => {
     }
     const removeFromList = (friend) => {
         const friendRemoved = invitedFriends.filter(person => {
-            return person.name != friend
+            return person.name !== friend
         })
         setFormData({ ...formData, invitedFriends: friendRemoved})
     }
@@ -104,7 +85,7 @@ const Dashboard = () => {
                 <h3>Your groups</h3>
                 <div className="flex-container">
                 {
-                groups.map(function(item, index){
+                yourGroups.map(function(item){
                     return <CompetitionGroup
                     name={item.name}
                     key={item.id}/>;
@@ -133,4 +114,17 @@ const Dashboard = () => {
 
   };
   
-  export default Dashboard;
+  const mapStateToProps = state => {
+    return {
+      groups: state.getGroups.groups
+    }
+  }
+  
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      getGroups: () => dispatch(actionTypes.getGroups())
+    }
+  }
+
+  export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

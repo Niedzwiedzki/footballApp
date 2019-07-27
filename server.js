@@ -11,8 +11,10 @@ const registerLoginRouter = require('./routes/api/register-login');
 const invitedRouter = require('./routes/api/invited');
 const deleteRegainRouter = require('./routes/api/delete-regain');
 const resultsRouter = require('./routes/api/results');
+const getGroups = require('./routes/api/getGroups');
 const updateJSONfiles = require('./jsonManagement/updateJSONfiles');
 const updateJSONfilesMatchTime = require('./jsonManagement/updateJSONfilesMatchTime');
+const cors = require('cors');
 
 //for test
 const TestUpdateJSONMatchTime = require('./jsonManagement/TestUpdateJSONMatchTime');
@@ -47,11 +49,14 @@ app.use(passport.initialize());
 require('./config/passport.js')(passport);
 
 //Use Routes
+app.use(cors({origin: 'http://localhost:3000'}));
 app.use(groupManagementRouter);
 app.use(registerLoginRouter);
 app.use(invitedRouter);
 app.use(deleteRegainRouter);
 app.use(resultsRouter);
+app.use(getGroups);
+
 
 // updateJSONfiles();
 setInterval(() => {
