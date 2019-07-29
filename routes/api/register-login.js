@@ -12,11 +12,11 @@ const Member = require('../../models/Member')
 // @access  Public
 
 router.post('/register', async (req, res) => {
-    
     try {
         const member = await Member.findOne({email: req.body.email})
         if(member) {
-            return res.status(400).json({email: 'Email aready exists'})
+            console.log('member already exists')
+            return res.status(400).send('Email aready exists')
         } else {
             const newMember = new Member({
                 name: req.body.name,
@@ -51,7 +51,7 @@ router.post('/login', async (req, res) => {
         const member = await Member.findOne({email})
         // check for member
         if(!member) {
-            return res.status(404).json({email: 'Member not found'})
+            return res.status(404).send('Member not found')
         } 
 
         // check password
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
             res.send({success: true, token: 'Bearer ' + token})
 
         } else {
-            return res.status(400).json({password: "Password incorrect"})
+            return res.status(400).send("Password incorrect")
         }
     } catch (e) {
         res.status(400).send(e)

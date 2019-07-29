@@ -1,6 +1,15 @@
-export const LOGIN = "LOGIN";
-export const LOGOUT = "LOGOUT";
+export const LOGIN_START = "AUTH_START";
+export const LOGIN_SUCCESS = "AUTH_SUCCESS";
+export const LOGIN_FAIL = "AUTH_FAIL";
+
 export const GET_PLAYERS = "GET_PLAYERS";
 export const FETCH_PLAYERS_FAILED = "FETCH_PLAYERS_FAILED";
+
 export const GET_GROUPS = "GET_GROUPS";
 export const FETCH_GROUPS_FAILED = "GET_GROUPS_FAILED";
+
+export const REGISTER_START = "REGISTER_START";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_FAIL = "REGISTER_FAIL";
+export const WRONG_PASSWORDS = "WRONG_PASSWORDS";
+

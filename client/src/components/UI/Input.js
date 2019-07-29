@@ -12,6 +12,7 @@ const Input = (props) => {
             className={props.inputClass}
             value={props.value}
             onChange={(e) => props.change(e)}
+            required
           />
     </div>
   );

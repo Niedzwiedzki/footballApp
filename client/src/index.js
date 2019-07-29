@@ -6,10 +6,11 @@ import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import login from './store/reducers/login';
 import getPlayers from './store/reducers/getPlayers';
 import getGroups from './store/reducers/getGroups';
+import register from './store/reducers/register';
 import thunk from 'redux-thunk';
 
 const reducer = combineReducers({
-    login, getPlayers, getGroups
+    login, getPlayers, getGroups, register
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

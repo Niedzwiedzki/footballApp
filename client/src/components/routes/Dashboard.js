@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Ball from '../staticElements/Ball'
 import CompetitionGroup from '../group/CompetitionGroup'
 import NewGroupForm from '../group/NewGroupForm'
@@ -7,10 +7,11 @@ import * as actionTypes from '../../store/actions/index'
 
 const Dashboard = (state) => {
 
-    if(state.groups.length === 0) {
-        state.getGroups()
-    }
-    const yourGroups = state.groups
+        useEffect(() => {
+        if(state.groups.length === 0) {
+            state.getGroups()
+        }
+        })
 
 
     const [competitionData, setCompetitionData] = useState({
@@ -85,7 +86,7 @@ const Dashboard = (state) => {
                 <h3>Your groups</h3>
                 <div className="flex-container">
                 {
-                yourGroups.map(function(item){
+                state.groups.map(function(item){
                     return <CompetitionGroup
                     name={item.name}
                     key={item.id}/>;

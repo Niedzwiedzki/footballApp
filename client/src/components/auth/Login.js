@@ -14,12 +14,30 @@ const Login = (state) => {
     setFormData({ ...updatedData });
   }
 
+
+  let loading = null;
+  if(state.logging){
+    loading = <div className="spinner-border text-light"></div>
+  }
+
+  let onSubmitMessage = null;
+  let formMessage = ''
+  if(state.message){
+    if(state.loggedIn == true) {
+      formMessage = "alert alert-success space"
+      console.log(formMessage)
+    } else {
+      formMessage = "alert alert-danger space"
+    }
+    onSubmitMessage = <p className={formMessage}>
+    <strong>{state.message}</strong>
+    </p>
+  }
+
+
   const onSubmit = e => {
     e.preventDefault(e);
-    state.logIn()
-    console.log(state.loggedIn)
-    console.log({ email: inputs[0].valueInput, password: inputs[1].valueInput });
-
+    state.onAuth(inputs[0].valueInput, inputs[1].valueInput)
   };
 
   const [formData, setFormData] = useState({
@@ -70,21 +88,27 @@ const Login = (state) => {
         }
         <button type="submit" className="btn btn-primary">
           Submit
-        </button>
+        </button><br/>
+        {loading}
+        {
+          onSubmitMessage
+        }
       </form>
     </div>
   );
 };
 const mapStateToProps = state => {
   return {
-    loggedIn: state.login.loggedIn
+    logging: state.login.logging,
+    loggedIn: state.login.loggedIn,
+    message: state.login.message
   }
 }
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    logIn: () => dispatch(actionTypes.login())
+    onAuth: (email, password) => dispatch(actionTypes.auth(email, password))
   }
 }
 
