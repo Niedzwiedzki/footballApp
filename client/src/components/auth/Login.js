@@ -25,7 +25,6 @@ const Login = (state) => {
   if(state.message){
     if(state.loggedIn == true) {
       formMessage = "alert alert-success space"
-      console.log(formMessage)
     } else {
       formMessage = "alert alert-danger space"
     }

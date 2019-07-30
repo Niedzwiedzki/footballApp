@@ -21,6 +21,21 @@ export const authFail = (error) => {
     }
 }
 
+export const logout = () => {
+    return {
+        type: actionTypes.TOKEN_EXPIRES
+    }
+}
+const expirationTime = 43200000
+
+export const tokenExpired = () => {
+    return dispatch => {
+        setTimeout(() => { 
+            dispatch(logout())
+         }, expirationTime);
+    } 
+}
+
 export const auth = (email, password) => {
     return dispatch => {
         dispatch(authStart());
@@ -30,8 +45,8 @@ export const auth = (email, password) => {
         }
         axios.post('login', authData)
             .then(response => {
-                // console.log(response)
-                dispatch(authSuccess());
+                    dispatch(authSuccess(response.data.token))
+                    dispatch(tokenExpired())
             })
             .catch(err => {
                 dispatch(authFail(err.response.data));
