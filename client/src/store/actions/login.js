@@ -45,8 +45,8 @@ export const auth = (email, password) => {
         }
         axios.post('login', authData)
             .then(response => {
-                    dispatch(authSuccess(response.data.token))
-                    dispatch(tokenExpired())
+                dispatch(authSuccess(response.data.token))
+                dispatch(tokenExpired())
             })
             .catch(err => {
                 dispatch(authFail(err.response.data));

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Input from '../UI/Input'
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions/index'
+import * as actionTypes from '../../store/actions/index';
 
 const Login = (state) => {
   const onChange = e => {

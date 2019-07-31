@@ -171,3 +171,18 @@ input[type=number]::-webkit-outer-spin-button {
   }
   
 }
+
+.header {
+  position: relative;
+}
+
+.menuButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: all .2s
+}
+
+.menuButton:hover{
+  transform: scale(1.5, 1.5);
+}
