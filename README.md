@@ -2,16 +2,16 @@
 
 Home Page:
 
-![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/home.PNG)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/client/src/images/home.PNG)
 
 Dashboard Page:
 
-![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/dashboard.PNG)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/client/src/images/dashboard.PNG)
 
 Groups Page:
 
-![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/groups.PNG)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/client/src/images/groups.PNG)
 
 Mobile Page:
 
-![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/mobile.PNG)
+![alt text](https://raw.githubusercontent.com/Niedzwiedzki/footballApp/master/client/src/images/mobile.PNG)
