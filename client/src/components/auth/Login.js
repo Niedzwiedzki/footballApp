@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Input from '../UI/Input'
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
+
 
 const Login = (state) => {
   const onChange = e => {
@@ -20,11 +22,14 @@ const Login = (state) => {
     loading = <div className="spinner-border text-light"></div>
   }
 
+  let redirectToGroups = null
+
   let onSubmitMessage = null;
   let formMessage = ''
   if(state.message){
-    if(state.loggedIn == true) {
+    if(state.loggedIn === true) {
       formMessage = "alert alert-success space"
+        redirectToGroups = <Redirect to="/dashboard"/>
     } else {
       formMessage = "alert alert-danger space"
     }
@@ -68,6 +73,7 @@ const Login = (state) => {
 
   return (
     <div>
+      {redirectToGroups}
       <h3>Log in</h3>
       <form onSubmit={e => onSubmit(e)}>
         {

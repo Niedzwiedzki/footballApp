@@ -3,9 +3,11 @@ import Member from '../member/Member';
 import SwitchMatches from '../switchMatches/SwitchMatches';
 import Finished from '../finished/Finished';
 import Scheduled from '../scheduled/Scheduled';
+import { connect } from 'react-redux';
+import * as actionTypes from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
-const Group = () => {
-
+const Group = (state) => {
     const [formData, setFormData] = useState({
         name: "Mistrzostwa u Janka",
         members: [
@@ -158,8 +160,14 @@ showScheduled: true
         </ul>   
     }
 
+    let redirect = null;
+    if(state.loggedIn === false) {
+        redirect = <Redirect to="/"/>
+    }
+
   return (
     <Fragment>
+        {redirect}
       <div className="col-sm-6 height-lg">
         <h3>{name}</h3>
         <ul className="list-group list-group-flush members">
@@ -178,4 +186,18 @@ showScheduled: true
   );
 };
 
-export default Group;
+
+const mapStateToProps = state => {
+    return {
+      loggedIn: state.login.loggedIn
+    }
+  }
+  
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+      onAuth: (email, password) => dispatch(actionTypes.auth(email, password))
+    }
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Group);

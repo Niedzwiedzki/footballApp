@@ -3,13 +3,14 @@ import Ball from '../staticElements/Ball'
 import CompetitionGroup from '../group/CompetitionGroup'
 import NewGroupForm from '../group/NewGroupForm'
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions/index'
+import * as actionTypes from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
 const Dashboard = (state) => {
 
         useEffect(() => {
         if(state.groups.length === 0) {
-            state.getGroups()
+            state.getGroups(state.token)
         }
         })
 
@@ -78,10 +79,14 @@ const Dashboard = (state) => {
         setFormData({ ...formData, invitedFriends: friendRemoved})
     }
 
-
+    let redirect = null;
+    if(state.loggedIn === false) {
+        redirect = <Redirect to="/"/>
+    }
 
     return (
         <Fragment>
+            {redirect}
             <div className="col-sm-6 height-lg">
                 <h3>Your groups</h3>
                 <div className="flex-container">
@@ -110,21 +115,23 @@ const Dashboard = (state) => {
             </div>
         </Fragment>
       );
-
-
-
+        
   };
   
   const mapStateToProps = state => {
     return {
-      groups: state.getGroups.groups
+      groups: state.getGroups.groups,
+      loggedIn: state.login.loggedIn,
+      token: state.login.token
     }
   }
+
+
   
   
-  const mapDispatchToProps = dispatch => {
+  const mapDispatchToProps = (dispatch) => {
     return {
-      getGroups: () => dispatch(actionTypes.getGroups())
+      getGroups: (token) => dispatch(actionTypes.getGroups(token))
     }
   }
 

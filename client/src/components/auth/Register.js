@@ -25,7 +25,7 @@ const Register = (state) => {
   let onSubmitMessage = null;
   let formMessage = ''
   if(state.message){
-    if(state.registered == true) {
+    if(state.registered === true) {
       formMessage = "alert alert-success space"
       console.log(formMessage)
     } else {

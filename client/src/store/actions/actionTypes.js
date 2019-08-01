@@ -1,7 +1,7 @@
 export const LOGIN_START = "AUTH_START";
 export const LOGIN_SUCCESS = "AUTH_SUCCESS";
 export const LOGIN_FAIL = "AUTH_FAIL";
-export const TOKEN_EXPIRES = "TOKEN_EXPIRES";
+export const LOGOUT = "LOGOUT";
 
 export const GET_PLAYERS = "GET_PLAYERS";
 export const FETCH_PLAYERS_FAILED = "FETCH_PLAYERS_FAILED";

@@ -30,7 +30,7 @@ const reducer = (state = initialState, action) => {
                 logging: false,
                 message: "You have successfully loggedIn"
             };
-        case actionTypes.TOKEN_EXPIRES:
+        case actionTypes.LOGOUT:
             return {
                 ...state,
                 token: null,

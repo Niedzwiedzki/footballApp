@@ -2,17 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import turnOff from '../../images/turnOff.svg';
 import { Link } from 'react-router-dom';
+import * as actionTypes from '../../store/actions/index';
 
 const Header = (state) => {
-  
+
+  state.checkAuthState()
+
 let image = null
 
-const logout = () => {
-  state.logout();
-}
-
-
-if(state.loggedIn == true) {
+if(state.loggedIn === true) {
   image = 
       <Link className="menuButton" to="/logout">
       <img src={turnOff} alt="Logout"/>
@@ -35,13 +33,13 @@ const mapStateToProps = state => {
   }
 }
 
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     logout: () => dispatch(actionTypes.logout())
-//   }
-// }
-
+const mapDispatchToProps = (dispatch) => {
+  return {
+    checkAuthState: () => dispatch(actionTypes.loginCheckState())
+  }
+}
 
 
-export default connect(mapStateToProps)(Header);
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
