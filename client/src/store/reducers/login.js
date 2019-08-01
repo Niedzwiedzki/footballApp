@@ -35,7 +35,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 token: null,
                 loggedIn: false,
-                message: "Please login again"
+                message: null
             };
         default:
             return state;

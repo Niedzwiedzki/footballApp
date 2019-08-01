@@ -5,56 +5,36 @@ import NewGroupForm from '../group/NewGroupForm'
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
 import { Redirect } from 'react-router-dom';
+import axios from '../../axios';
 
 const Dashboard = (state) => {
 
         useEffect(() => {
-        if(state.groups.length === 0) {
-            state.getGroups(state.token)
-        }
-        })
+                state.getGroups(state.token)
+                state.getCompetitions(state.token)
+        }, [])
 
 
-    const [competitionData, setCompetitionData] = useState({
-        competition: [
-            {
-                name: "World Cup",
-                id: "2001"
-            },
-            {
-                name: "Champions League",
-                id: "2002"
-            },
-            {
-                name: "EURO",
-                id: "2003"
-            },
-            {
-                name: "UEFA",
-                id: "2004"
-            },
-            {
-                name: "COPA AMERICA",
-                id: "2006"
-            }
-        ]
-
-    })
-
-    let { competition } = competitionData;
 
 
 
     const [formData, setFormData] = useState({
-        selectedCompetition: null,
+        selectedCompetition: '',
         invitedFriends: [],
-        newFriend: ''
+        newFriend: '',
+        invalidEmail: null,
+        newGroupName: ''
     })
 
-    let { selectedCompetition, invitedFriends, newFriend } = formData;
+    let { selectedCompetition, invitedFriends, newFriend, invalidEmail, newGroupName } = formData;
+
+    const updateName = (e) => {
+        setFormData({ ...formData, newGroupName: e.target.value })
+    }
 
     const selectCompetition = (e) => {
         setFormData({ ...formData, selectedCompetition: e.target.value })
+
     }
 
     const NewMemberEmail = (e) => {
@@ -65,11 +45,15 @@ const Dashboard = (state) => {
         const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const checkEmail = emailPattern.test(String(newFriend).toLowerCase());
         if (checkEmail){
-            const updatedFriends = invitedFriends;
+            const updatedFriends = [...invitedFriends];
             updatedFriends.push({name: newFriend})
             setFormData({ ...formData, newFriend: '', invitedFriends: updatedFriends})
         } else {
-            console.log("doesn't work")  
+        setFormData({ ...formData, invalidEmail: <p className="alert alert-danger space">
+            <strong>Invalid Email</strong>
+            </p> })
+        
+        
         }  
     }
     const removeFromList = (friend) => {
@@ -79,11 +63,38 @@ const Dashboard = (state) => {
         setFormData({ ...formData, invitedFriends: friendRemoved})
     }
 
+    const submitForm = (e) => {
+        e.preventDefault();
+        const invitedFriendsArray = invitedFriends.map(function(friend){
+            return friend.name
+
+        })
+        const groupData = {
+            invitedFriends: invitedFriendsArray,
+            competitionId: Number(selectedCompetition),
+            name: newGroupName
+        }
+        axios.post('/newgroup', groupData, 
+        {headers: {
+            "Authorization" : state.token,
+            "Content-Type" : "application/json"
+          }
+        }
+        )
+        .then(response => {
+            console.log(response)
+            setFormData({ selectedCompetition: '', invitedFriends: [],newFriend: '',invalidEmail: null, newGroupName: '' })})
+        .catch(err => {
+            console.log(err.response)
+        })
+    }
+
+
     let redirect = null;
     if(state.loggedIn === false) {
         redirect = <Redirect to="/"/>
     }
-
+    
     return (
         <Fragment>
             {redirect}
@@ -101,13 +112,18 @@ const Dashboard = (state) => {
                 <hr className="space"/>
                 <button type="button" className="btn btn-primary btn-lg" data-toggle="collapse" data-target="#newgroup">Create new group</button>
                 <NewGroupForm 
-                competitions={competition} 
-                select={selectCompetition} 
+                competitions={state.competitions}
+                name={newGroupName}
+                changeName={updateName}
+                alertMessage={invalidEmail}
+                select={selectCompetition}
+                selection={selectedCompetition} 
                 email={newFriend} 
                 newMember={NewMemberEmail} 
                 add={addMember} 
                 newMembers={invitedFriends}
                 deleteInvitation={removeFromList}
+                submit={submitForm}
                 />
             </div>
             <div className="col-sm-6">
@@ -115,14 +131,14 @@ const Dashboard = (state) => {
             </div>
         </Fragment>
       );
-        
   };
   
   const mapStateToProps = state => {
     return {
       groups: state.getGroups.groups,
       loggedIn: state.login.loggedIn,
-      token: state.login.token
+      token: state.login.token,
+      competitions: state.getCompetitions.competitions
     }
   }
 
@@ -131,7 +147,8 @@ const Dashboard = (state) => {
   
   const mapDispatchToProps = (dispatch) => {
     return {
-      getGroups: (token) => dispatch(actionTypes.getGroups(token))
+      getGroups: (token) => dispatch(actionTypes.getGroups(token)),
+      getCompetitions: (token) => dispatch(actionTypes.getCompetitions(token))
     }
   }
 

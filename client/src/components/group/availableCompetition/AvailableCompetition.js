@@ -4,7 +4,7 @@ import React from 'react';
 
 const AvailableCompetition = (props) => {
   return (
-    <option>{props.competition}</option>
+    <option value={props.id}>{props.competition}</option>
   );
 };
 

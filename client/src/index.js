@@ -7,10 +7,11 @@ import login from './store/reducers/login';
 import getPlayers from './store/reducers/getPlayers';
 import getGroups from './store/reducers/getGroups';
 import register from './store/reducers/register';
+import getCompetitions from './store/reducers/getCompetitions';
 import thunk from 'redux-thunk';
 
 const reducer = combineReducers({
-    login, getPlayers, getGroups, register
+    login, getPlayers, getGroups, register, getCompetitions
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

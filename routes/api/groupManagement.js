@@ -22,7 +22,7 @@ router.get(
       new Promise((resolve, reject) => {
           let competitionDataRaw = fs.readFileSync(`competitions/${competition}/matches.json`);
           let competitionDataJSON = JSON.parse(competitionDataRaw)
-          availableCompetitions.push(competitionDataJSON.competition.id, competitionDataJSON.competition.name)
+          availableCompetitions.push({id: competitionDataJSON.competition.id, name: competitionDataJSON.competition.name})
           resolve();
     })
     })
