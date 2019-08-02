@@ -106,13 +106,12 @@ const Group = (state) => {
         }
      }
 ],
-showFinished: false,
-showScheduled: true
+showFinished: false
 
       });
     
     
-      let { name, members, finished, scheduled, showFinished, showScheduled } = formData;
+      let { name, members, finished, scheduled, showFinished } = formData;
 
 
       const clickFinished = () => {

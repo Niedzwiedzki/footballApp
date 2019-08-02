@@ -19,7 +19,7 @@ body {
     width: 70%;
 }
 
-@keyframes rotation {
+  @keyframes rotation {
     from {-ms-transform: rotate(0deg); /* IE 9 */
         -webkit-transform: rotate(0deg); /* Safari */
         transform: rotate(0deg);}
@@ -27,6 +27,7 @@ body {
         -webkit-transform: rotate(360deg); /* Safari */
         transform: rotate(360deg);}
   }
+
 
   .not-active{
     pointer-events: none;
@@ -51,8 +52,10 @@ body {
   text-align: center;
   line-height: 75px;
   font-size: 20px;
-  box-shadow: -5px 5px 40px rgb(255, 255, 255);
+  box-shadow: -10px 10px 30px rgb(255, 255, 255);
   transition: all .2s;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
  .flex-container > div:hover{
@@ -61,6 +64,12 @@ body {
   bottom: 5px;
   box-shadow: -20px 20px 40px rgb(255, 255, 255);
  }
+
+ .flex-container > div.adminGroup {
+  background-color: none;
+  background-image: linear-gradient(to right, rgb(255, 255, 255) , rgb(122,217,6));
+
+}
  
  .space {
 	margin-top: 20px; 

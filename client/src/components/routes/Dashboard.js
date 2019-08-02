@@ -42,12 +42,12 @@ const Dashboard = (state) => {
     }
 
     const addMember = () => {
-        const emailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const emailPattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const checkEmail = emailPattern.test(String(newFriend).toLowerCase());
         if (checkEmail){
             const updatedFriends = [...invitedFriends];
             updatedFriends.push({name: newFriend})
-            setFormData({ ...formData, newFriend: '', invitedFriends: updatedFriends})
+            setFormData({ ...formData, newFriend: '', invitedFriends: updatedFriends, invalidEmail: null})
         } else {
         setFormData({ ...formData, invalidEmail: <p className="alert alert-danger space">
             <strong>Invalid Email</strong>
@@ -105,7 +105,9 @@ const Dashboard = (state) => {
                 state.groups.map(function(item){
                     return <CompetitionGroup
                     name={item.name}
-                    key={item.id}/>;
+                    key={item.id}
+                    status={item.admin}
+                    />;
                 })
                 }
                 </div>

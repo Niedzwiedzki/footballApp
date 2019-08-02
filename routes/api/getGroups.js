@@ -12,7 +12,23 @@ const Member = require('../../models/Member')
 router.get('/getGroups', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
         const member = await Member.findOne({email: req.user.email})
-        const groups = member.memberGroups
+        const memberGroups = member.memberGroups
+        const adminGroups = member.adminGroups
+        groups = memberGroups.map((group)=>{
+            if (adminGroups.includes(group.id)){
+                return {
+                    id: group.id,
+                    name: group.name,
+                    admin: true
+                }
+            } else {
+                return {
+                    id: group.id,
+                    name: group.name,
+                    admin: false
+                }  
+            }
+        })
         if(groups.length === 0) {
             return res.status(400).json({groups: "You aren't a member of any group"})
         }
