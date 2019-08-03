@@ -29,7 +29,7 @@ if(state.loggedIn === true) {
 
 const mapStateToProps = state => {
   return {
-    loggedIn: state.login.loggedIn
+    loggedIn: state.authentication.authStatus
   }
 }
 

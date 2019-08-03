@@ -10,7 +10,6 @@ const Login = (state) => {
   if(state.groupToJoin._id){
     group = "/" + state.groupToJoin._id
   }
-  console.log(group)
 
 
 
@@ -113,9 +112,9 @@ const Login = (state) => {
 };
 const mapStateToProps = state => {
   return {
-    logging: state.login.logging,
-    loggedIn: state.login.loggedIn,
-    message: state.login.message,
+    logging: state.authentication.logging,
+    loggedIn: state.authentication.authStatus,
+    message: state.authentication.logMessage,
     groupToJoin: state.getGroups.groupToJoin
   }
 }

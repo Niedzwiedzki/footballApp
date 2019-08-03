@@ -97,7 +97,7 @@ router.post('/register/:id', async (req, res) => {
             return res.status(400).send('You are already member of this group') 
         }
         if (!group.invitedFriends.includes(email)){
-            return res.status(400).json({group: 'You are not invited to join this group'}) 
+            return res.status(400).send('You are not invited to join this group') 
         }
 
         const member = await Member.findOne({email: email})
@@ -113,26 +113,26 @@ router.post('/register/:id', async (req, res) => {
             // hashing the password
            
             await bcrypt.genSalt(10, (e, salt) => {
-                bcrypt.hash(newMember.password, salt, (e, hash) => {
+                bcrypt.hash(newMember.password, salt, async (e, hash) => {
                     if(e) throw e;
                     newMember.password = hash;
-                    newMember.save()
-                        .then((member) => {group.members.push({
-                            "name" : member.name,
-                            "email" : member.email,
-                            "_id" : member._id,
+                    await newMember.save()
+                    group.members.push({
+                            "name" : newMember.name,
+                            "email" : newMember.email,
+                            "_id" : newMember._id,
                             "bets" : [],
                             "results": {}
                         })
-                        group.save()
-                            .then(group => res.json(group.members))
-                            .catch(e => console.log(e))
+                    await group.save()
+                    const payload = { id: newMember.id, member: newMember.name } // create JWT payload
+                    const token = await jwt.sign(payload, keys.secretOrKey, {expiresIn: "12h"})
+                    res.send({success: true, token: 'Bearer ' + token})
+                    .catch(e => console.log(e))
                     })
                 })
-            })
-        }
-
-    } catch(e){
+            }
+        } catch(e){
         res.status(400).send(e)
     }
 })

@@ -138,8 +138,8 @@ const Dashboard = (state) => {
   const mapStateToProps = state => {
     return {
       groups: state.getGroups.groups,
-      loggedIn: state.login.loggedIn,
-      token: state.login.token,
+      loggedIn: state.authentication.authStatus,
+      token: state.authentication.token,
       competitions: state.getCompetitions.competitions
     }
   }

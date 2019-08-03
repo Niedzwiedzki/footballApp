@@ -15,7 +15,6 @@ router.post('/register', async (req, res) => {
     try {
         const member = await Member.findOne({email: req.body.email})
         if(member) {
-            console.log('member already exists')
             return res.status(400).send('Email aready exists')
         } else {
             const newMember = new Member({
@@ -23,13 +22,17 @@ router.post('/register', async (req, res) => {
                 email: req.body.email,
                 password: req.body.password
             });
+
+            const token = ''
             // hashing the password
             await bcrypt.genSalt(10, (e, salt) => {
-                bcrypt.hash(newMember.password, salt, (e, hash) => {
+                    bcrypt.hash(newMember.password, salt, async (e, hash) => {
                     newMember.password = hash;
-                    newMember.save()
-                        .then(member => res.json(member))
-                        .catch(e => res.status(400).send(e))
+                    await newMember.save();
+                    const payload = { id: newMember.id, member: newMember.name } // create JWT payload
+                    const token = await jwt.sign(payload, keys.secretOrKey, {expiresIn: "12h"})
+                    res.send({success: true, token: 'Bearer ' + token})
+                    .catch(e => res.status(400).send(e))
                 })
             })
         }

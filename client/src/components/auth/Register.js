@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 import Input from '../UI/Input';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index'
-
+import { Redirect } from 'react-router-dom';
 
 
 const Register = (state) => {
+
+  let group = ''
+  if(state.groupToJoin._id){
+    group = "/" + state.groupToJoin._id
+  }
+
   const onChange = e => {
     const index = inputs.findIndex(input => {
       return input.inputId === e.target.id
@@ -22,12 +28,14 @@ const Register = (state) => {
     loading = <div className="spinner-border text-light"></div>
   }
 
+  let redirectToGroups = null;
+
   let onSubmitMessage = null;
   let formMessage = ''
   if(state.message){
     if(state.registered === true) {
       formMessage = "alert alert-success space"
-      console.log(formMessage)
+      redirectToGroups = <Redirect to="/dashboard"/>
     } else {
       formMessage = "alert alert-danger space"
     }
@@ -43,7 +51,7 @@ const Register = (state) => {
       state.noMatch()
     } else {
       // console.log({name: inputs[0].valueInput, email: inputs[1].valueInput, password: inputs[2].valueInput});
-      state.onRegister(inputs[0].valueInput, inputs[1].valueInput, inputs[2].valueInput)
+      state.onRegister(inputs[0].valueInput, inputs[1].valueInput, inputs[2].valueInput, group)
     }
   };
 
@@ -96,6 +104,7 @@ const Register = (state) => {
 
   return (
     <div>
+      {redirectToGroups}
       <h3>Register</h3>
       <form onSubmit={e => onSubmit(e)}>
       {
@@ -129,9 +138,10 @@ const Register = (state) => {
 
 const mapStateToProps = state => {
   return {
-    registering: state.register.registering,
-    registered: state.register.registered,
-    message: state.register.message
+    registering: state.authentication.registering,
+    registered: state.authentication.authStatus,
+    message: state.authentication.regMessage,
+    groupToJoin: state.getGroups.groupToJoin
   }
 }
 
@@ -139,7 +149,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     noMatch: () => dispatch(actionTypes.wrongPasswords()),
-    onRegister: (name, email, password) => dispatch(actionTypes.register(name, email, password))
+    onRegister: (name, email, password, group) => dispatch(actionTypes.register(name, email, password, group))
   }
 }
 

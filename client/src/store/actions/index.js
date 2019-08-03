@@ -1,5 +1,4 @@
 export {getGroups, lookForGroup} from './getGroups'
-export {auth, logout, loginCheckState} from './login'
-export {register, wrongPasswords} from './register'
+export {auth, logout, loginCheckState, wrongPasswords, register} from './authentication'
 export {getCompetitions} from './getCompetitions'
 export {} from './getPlayers'

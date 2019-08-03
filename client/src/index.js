@@ -3,15 +3,14 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
-import login from './store/reducers/login';
+import authentication from './store/reducers/authentication';
 import getPlayers from './store/reducers/getPlayers';
 import getGroups from './store/reducers/getGroups';
-import register from './store/reducers/register';
 import getCompetitions from './store/reducers/getCompetitions';
 import thunk from 'redux-thunk';
 
 const reducer = combineReducers({
-    login, getPlayers, getGroups, register, getCompetitions
+    authentication, getPlayers, getGroups, getCompetitions
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
