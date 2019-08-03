@@ -6,6 +6,15 @@ import { Redirect } from 'react-router-dom';
 
 
 const Login = (state) => {
+  let group = ''
+  if(state.groupToJoin._id){
+    group = "/" + state.groupToJoin._id
+  }
+  console.log(group)
+
+
+
+
   const onChange = e => {
     const index = inputs.findIndex(input => {
       return input.inputId === e.target.id
@@ -41,7 +50,7 @@ const Login = (state) => {
 
   const onSubmit = e => {
     e.preventDefault(e);
-    state.onAuth(inputs[0].valueInput, inputs[1].valueInput)
+    state.onAuth(inputs[0].valueInput, inputs[1].valueInput, group)
   };
 
   const [formData, setFormData] = useState({
@@ -106,14 +115,15 @@ const mapStateToProps = state => {
   return {
     logging: state.login.logging,
     loggedIn: state.login.loggedIn,
-    message: state.login.message
+    message: state.login.message,
+    groupToJoin: state.getGroups.groupToJoin
   }
 }
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAuth: (email, password) => dispatch(actionTypes.auth(email, password))
+    onAuth: (email, password, group) => dispatch(actionTypes.auth(email, password, group))
   }
 }
 

@@ -7,7 +7,7 @@ const sendInvitationEmail = (email, group, id) => {
         to: email,
         from: 'kuban@op.pl',
         subject: group,
-        text: `Zapraszam do uczestnictwa w typowaniu wyników http://localhost:5000/register/${id}` 
+        text: `Zapraszam do uczestnictwa w typowaniu wyników http://localhost:3000/invitation?group=${id}` 
     })
 }
 

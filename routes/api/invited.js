@@ -21,22 +21,22 @@ router.post('/login/:id', async (req, res) => {
     try {
         const group = await Group.findById(req.params.id)
         if(!group) {
-            return res.status(400).json({group: 'this group do not exist'})
+            return res.status(400).send('this group do not exist')
         }
         group.members.forEach((member) => {if(member.email === email){
             userAlreadyIn.push(email)
         }})
         if (userAlreadyIn.length > 0){
-            return res.status(400).json({group: 'You are already member of this group'}) 
+            return res.status(400).send('You are already member of this group') 
         }
         if (!group.invitedFriends.includes(email)){
-            return res.status(400).json({group: 'You are not invited to join this group'}) 
+            return res.status(400).send('You are not invited to join this group') 
         }
 
         const member = await Member.findOne({email})
         // check for member
         if(!member) {
-            return res.status(404).json({email: 'Member not found'})
+            return res.status(404).send('Member not found')
         } 
 
         // check password
@@ -65,7 +65,7 @@ router.post('/login/:id', async (req, res) => {
             res.send({success: true, token: 'Bearer ' + token})
 
         } else {
-            return res.status(400).json({password: "Password incorrect"})
+            return res.status(400).send("Password incorrect")
         }
     } catch (e) {
         res.status(400).send(e)
@@ -86,7 +86,7 @@ router.post('/register/:id', async (req, res) => {
         const group = await Group.findById(req.params.id)
 
         if(!group) {
-            return res.status(400).json({group: 'this group do not exist'})
+            return res.status(400).send('this group do not exist')
         }
 
         group.members.forEach((member) => {if(member.email === email){
@@ -94,7 +94,7 @@ router.post('/register/:id', async (req, res) => {
         }})
 
         if (userAlreadyIn.length > 0){
-            return res.status(400).json({group: 'You are already member of this group'}) 
+            return res.status(400).send('You are already member of this group') 
         }
         if (!group.invitedFriends.includes(email)){
             return res.status(400).json({group: 'You are not invited to join this group'}) 
@@ -102,7 +102,7 @@ router.post('/register/:id', async (req, res) => {
 
         const member = await Member.findOne({email: email})
         if(member) {
-            return res.status(400).json({email: 'Email aready exists'})
+            return res.status(400).send('Email aready exists')
         } else {
             const newMember = new Member({
                 name: name,

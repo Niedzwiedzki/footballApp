@@ -1,13 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { connect } from 'react-redux';
 import turnOff from '../../images/turnOff.svg';
 import { Link } from 'react-router-dom';
 import * as actionTypes from '../../store/actions/index';
 
+
 const Header = (state) => {
 
-  state.checkAuthState()
-
+state.checkAuthState()
 let image = null
 
 if(state.loggedIn === true) {

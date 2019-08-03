@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    groups: []
+    groups: [],
+    groupToJoin: {}
 }
 
 const reducer = (state = initialState, action) => {
@@ -11,9 +12,15 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 groups: action.groups
             };
+        case actionTypes.GROUP_FOUND:
+            return {
+                ...state,
+                groupToJoin: action.groupToJoin
+            };
         default:
             return state;
     }
 };
+
 
 export default reducer;

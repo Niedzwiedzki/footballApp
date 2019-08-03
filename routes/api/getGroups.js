@@ -40,4 +40,24 @@ router.get('/getGroups', passport.authenticate('jwt', {session: false}), async (
 }
 )
 
+
+
+// @route   GET /lookForGroup
+// @desc    Look for group to join
+// @access  Public
+router.get('/lookForGroup', async (req, res) => {
+    console.log(req.query)
+    try {
+        const group = await Group.findById(req.query.group)
+        if(!group) {
+            return res.status(400).json({groups: "Unfortunatelly there is no group to join"})
+        }
+        res.send(group)
+            
+    } catch (e) {
+        res.status(400).send(e)
+    }
+}
+)
+
 module.exports = router;

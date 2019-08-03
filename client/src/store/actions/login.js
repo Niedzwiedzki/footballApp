@@ -38,15 +38,16 @@ export const tokenExpired = (time) => {
     } 
 }
 
-export const auth = (email, password) => {
+export const auth = (email, password, group) => {
     return dispatch => {
         dispatch(authStart());
         const authData = {
             email: email,
-            password: password
+            password: password,
         }
+        console.log(group)
         
-        axios.post('login', authData)
+        axios.post('login'+group, authData)
             .then(response => {
                 const expirationTime = new Date(new Date().getTime() + expirationDate);
                 localStorage.setItem('token', response.data.token);
@@ -61,7 +62,6 @@ export const auth = (email, password) => {
 }
 
 export const loginCheckState = () => {
-
     return dispatch => {
         const token = localStorage.getItem('token');
         if(!token) {

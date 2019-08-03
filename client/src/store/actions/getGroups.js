@@ -32,3 +32,27 @@ export const getGroups = (token) => {
             })
     }
 }
+
+export const groupFound = (groupToJoin) => {
+    return {
+        type: actionTypes.GROUP_FOUND,
+        groupToJoin: groupToJoin
+    };
+} 
+
+export const lookForGroup = (group) => {
+    return dispatch => {
+        const groupData = {
+            group: group
+        }
+        axios.get('lookForGroup', {
+            params: groupData
+          })
+            .then(response => {
+                dispatch(groupFound(response.data))
+            })
+            .catch (error => {
+                console.log(error.response)
+            })
+    }
+}
