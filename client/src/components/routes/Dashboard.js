@@ -89,15 +89,12 @@ const Dashboard = (state) => {
         })
     }
 
-
-    let redirect = null;
-    if(state.loggedIn === false) {
-        redirect = <Redirect to="/"/>
+    const select = (id) => {
+        state.setGroup(id)
     }
-    
+ 
     return (
         <Fragment>
-            {redirect}
             <div className="col-sm-6 height-lg">
                 <h3>Your groups</h3>
                 <div className="flex-container">
@@ -107,6 +104,7 @@ const Dashboard = (state) => {
                     name={item.name}
                     key={item.id}
                     status={item.admin}
+                    selectGroup={() => select(item.id)}
                     />;
                 })
                 }
@@ -150,7 +148,8 @@ const Dashboard = (state) => {
   const mapDispatchToProps = (dispatch) => {
     return {
       getGroups: (token) => dispatch(actionTypes.getGroups(token)),
-      getCompetitions: (token) => dispatch(actionTypes.getCompetitions(token))
+      getCompetitions: (token) => dispatch(actionTypes.getCompetitions(token)),
+      setGroup: (id) => dispatch(actionTypes.setGroup(id))
     }
   }
 

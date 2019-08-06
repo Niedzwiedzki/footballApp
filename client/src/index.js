@@ -4,13 +4,13 @@ import App from './App';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
 import authentication from './store/reducers/authentication';
-import getPlayers from './store/reducers/getPlayers';
 import getGroups from './store/reducers/getGroups';
+import groupData from './store/reducers/groupData';
 import getCompetitions from './store/reducers/getCompetitions';
 import thunk from 'redux-thunk';
 
 const reducer = combineReducers({
-    authentication, getPlayers, getGroups, getCompetitions
+    authentication, getGroups, groupData, getCompetitions
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

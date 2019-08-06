@@ -12,6 +12,7 @@ const invitedRouter = require('./routes/api/invited');
 const deleteRegainRouter = require('./routes/api/delete-regain');
 const resultsRouter = require('./routes/api/results');
 const getGroups = require('./routes/api/getGroups');
+const getPlayers = require('./routes/api/getPlayers');
 const updateJSONfiles = require('./jsonManagement/updateJSONfiles');
 const updateJSONfilesMatchTime = require('./jsonManagement/updateJSONfilesMatchTime');
 const cors = require('cors');
@@ -56,6 +57,7 @@ app.use(invitedRouter);
 app.use(deleteRegainRouter);
 app.use(resultsRouter);
 app.use(getGroups);
+app.use(getPlayers);
 
 
 // updateJSONfiles();

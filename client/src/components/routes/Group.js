@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Member from '../member/Member';
 import SwitchMatches from '../switchMatches/SwitchMatches';
 import Finished from '../finished/Finished';
@@ -10,23 +10,6 @@ import { Redirect } from 'react-router-dom';
 const Group = (state) => {
     const [formData, setFormData] = useState({
         name: "Mistrzostwa u Janka",
-        members: [
-        {
-            name: "Kuba Niedźwiedzki",
-            points: 12,
-            id: "asfasd234rq4rf"
-        },
-        {
-            name: "Janek N",
-            points: 11,
-            id: "aasd234rq4rf"
-        },
-        {
-            name: "Przemek",
-            points: 14,
-            id: "asfwwwd234rq4rf"
-        }
-    ],
     finished: [
         {
             id: "12345",
@@ -111,7 +94,7 @@ showFinished: false
       });
     
     
-      let { name, members, finished, scheduled, showFinished } = formData;
+      let { name, finished, scheduled, showFinished } = formData;
 
 
       const clickFinished = () => {
@@ -159,20 +142,18 @@ showFinished: false
         </ul>   
     }
 
-    let redirect = null;
-    if(state.loggedIn === false) {
-        redirect = <Redirect to="/"/>
-    }
-
+    useEffect(() => {
+        state.getPlayers(state.token, state.selectedGroup)
+        }, [])
+    console.log(state.players)
   return (
     <Fragment>
-        {redirect}
       <div className="col-sm-6 height-lg">
         <h3>{name}</h3>
         <ul className="list-group list-group-flush members">
             {
-               members.map(function(item){
-                    return <Member name={item.name} points={item.points} key={item.id}/>;
+               state.players.map(function(player){
+                    return <Member name={player.name} points={1000} key={player._id}/>;
                   })
             }
         </ul>
@@ -188,14 +169,16 @@ showFinished: false
 
 const mapStateToProps = state => {
     return {
-      loggedIn: state.authentication.AuthStatus
+    selectedGroup: state.groupData.groupId,
+    token: state.authentication.token,
+    players: state.groupData.players
     }
   }
   
   
   const mapDispatchToProps = dispatch => {
     return {
-      onAuth: (email, password) => dispatch(actionTypes.auth(email, password))
+      getPlayers: (token, id) => dispatch(actionTypes.getPlayers(token, id))
     }
   }
 

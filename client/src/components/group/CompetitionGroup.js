@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 
 
@@ -8,7 +9,7 @@ const CompetitionGroup = (props) => {
     adminClass="adminGroup"
   }
   return (
-    <div className={adminClass}>{props.name}</div>
+    <Link to='/group' onClick={props.selectGroup}><div className={adminClass}>{props.name}</div></Link>
   );
 };
 

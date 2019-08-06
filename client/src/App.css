@@ -42,9 +42,13 @@ body {
   display: flex;
   flex-wrap: wrap;
 }
+
+.flex-container > a:hover {
+  text-decoration: none;
+}
   
   
- .flex-container > div {
+ .flex-container > a > div {
   background-color: rgb(255,255,255);
   color: rgb(0,0,0);
   width: 200px;
@@ -58,14 +62,14 @@ body {
   border-radius: 5px;
 }
 
- .flex-container > div:hover{
+ .flex-container > a > div:hover{
   position: relative;
   left: 5px;
   bottom: 5px;
   box-shadow: -20px 20px 40px rgb(255, 255, 255);
  }
 
- .flex-container > div.adminGroup {
+ .flex-container > a > div.adminGroup {
   background-color: none;
   background-image: linear-gradient(to right, rgb(255, 255, 255) , rgb(122,217,6));
 

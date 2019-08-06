@@ -3,12 +3,14 @@ import { connect } from 'react-redux';
 import turnOff from '../../images/turnOff.svg';
 import { Link } from 'react-router-dom';
 import * as actionTypes from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
 
 const Header = (state) => {
 
 state.checkAuthState()
 let image = null
+let redirect = null;
 
 if(state.loggedIn === true) {
   image = 
@@ -17,8 +19,16 @@ if(state.loggedIn === true) {
       </Link>
    }
 
+   useEffect(() => {
+    if(state.loggedIn === false) {
+      redirect = <Redirect to="/"/>
+  }
+}, [])
+
+
   return (
     <div className="col-sm-12 height-sm header">
+      {redirect}
       <h1 className="text-center">footballApp</h1>
       {image}
       <hr className="space" />
