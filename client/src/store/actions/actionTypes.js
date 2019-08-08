@@ -19,3 +19,6 @@ export const SET_GROUP = "SET_GROUP";
 export const GET_PLAYERS = "GET_PLAYERS";
 
 
+export const SET_MATCHES = "SET_MATCHES";
+
+

@@ -5,11 +5,11 @@ import Finished from '../finished/Finished';
 import Scheduled from '../scheduled/Scheduled';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
-import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Group = (state) => {
     const [formData, setFormData] = useState({
-        name: "Mistrzostwa u Janka",
+        // name: "Mistrzostwa u Janka",
     finished: [
         {
             id: "12345",
@@ -93,8 +93,8 @@ showFinished: false
 
       });
     
-    
-      let { name, finished, scheduled, showFinished } = formData;
+    console.log(state.matches.scheduled)
+      let { finished, scheduled, showFinished } = formData;
 
 
       const clickFinished = () => {
@@ -112,12 +112,12 @@ showFinished: false
     let displayed =         
         <ul className="list-group matchesToPlay text-primary">
         {
-                scheduled.map(function(item, index){
+                state.matches.scheduled.map(function(item, index){
                     return <Scheduled 
                     homeTeam={item.homeTeam.name}
-                    homeBet={item.homeTeam.bet}
+                    homeBet={1}
                     awayTeam={item.awayTeam.name}
-                    awayBet={item.awayTeam.bet}
+                    awayBet={1}
                     key={item.id}
                     changed = {e => onChange(e, index)}/>;
                 })
@@ -127,15 +127,15 @@ showFinished: false
         displayed =         
         <ul className="list-group matchesPlayed">
         {
-               finished.map(function(item){
+               state.matches.finished.map(function(item){
                     return <Finished 
                     homeTeam={item.homeTeam.name}
-                    homeResult={item.homeTeam.score}
-                    homeBet={item.homeTeam.bet}
+                    homeResult={item.score.fullTime.homeTeam}
+                    homeBet={99}
                     awayTeam={item.awayTeam.name}
-                    awayResult={item.awayTeam.score}
-                    awayBet={item.awayTeam.bet}
-                    score = {item.score}
+                    awayResult={item.score.fullTime.awayTeam}
+                    awayBet={99}
+                    score = {[0,1,3][Math.floor(Math.random()*3)]}
                     key={item.id}/>;
                   })
         }
@@ -144,12 +144,12 @@ showFinished: false
 
     useEffect(() => {
         state.getPlayers(state.token, state.selectedGroup)
+        state.getMatches(state.token, state.competitionId)
         }, [])
-    console.log(state.players)
   return (
     <Fragment>
       <div className="col-sm-6 height-lg">
-        <h3>{name}</h3>
+      <div className="groupName"><Link to='/dashboard'><button type="button" className="btn btn-info"><i className="left"/></button></Link><h3>{state.name}</h3></div>
         <ul className="list-group list-group-flush members">
             {
                state.players.map(function(player){
@@ -170,15 +170,19 @@ showFinished: false
 const mapStateToProps = state => {
     return {
     selectedGroup: state.groupData.groupId,
+    competitionId: state.groupData.competitionId,
     token: state.authentication.token,
-    players: state.groupData.players
+    players: state.groupData.players,
+    name: state.groupData.name,
+    matches: state.groupData.matches
     }
   }
   
   
   const mapDispatchToProps = dispatch => {
     return {
-      getPlayers: (token, id) => dispatch(actionTypes.getPlayers(token, id))
+      getPlayers: (token, id) => dispatch(actionTypes.getPlayers(token, id)),
+      getMatches: (token, competitionId) => dispatch(actionTypes.getMatches(token, competitionId))
     }
   }
 

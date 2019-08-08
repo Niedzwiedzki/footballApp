@@ -89,8 +89,8 @@ const Dashboard = (state) => {
         })
     }
 
-    const select = (id) => {
-        state.setGroup(id)
+    const select = (id, competition, name) => {
+        state.setGroup(id, competition, name)
     }
  
     return (
@@ -100,11 +100,12 @@ const Dashboard = (state) => {
                 <div className="flex-container">
                 {
                 state.groups.map(function(item){
+                    console.log(item)
                     return <CompetitionGroup
                     name={item.name}
                     key={item.id}
                     status={item.admin}
-                    selectGroup={() => select(item.id)}
+                    selectGroup={() => select(item.id, item.competition, item.name)}
                     />;
                 })
                 }
@@ -149,7 +150,7 @@ const Dashboard = (state) => {
     return {
       getGroups: (token) => dispatch(actionTypes.getGroups(token)),
       getCompetitions: (token) => dispatch(actionTypes.getCompetitions(token)),
-      setGroup: (id) => dispatch(actionTypes.setGroup(id))
+      setGroup: (id, competition, name) => dispatch(actionTypes.setGroup(id, competition, name))
     }
   }
 

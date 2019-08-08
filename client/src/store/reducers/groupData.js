@@ -2,7 +2,10 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     groupId: '',
-    players: []
+    competitionId: '',
+    players: [],
+    matches: {finished: [], scheduled: []},
+    name:''
 }
 
 const reducer = (state = initialState, action) => {
@@ -10,12 +13,19 @@ const reducer = (state = initialState, action) => {
         case actionTypes.SET_GROUP:
             return {
                 ...state,
-                groupId: action.groupId
+                groupId: action.groupId,
+                competitionId: action.competitionId,
+                name: action.name
             };
         case actionTypes.GET_PLAYERS:
             return {
                 ...state,
                 players: action.players
+            };
+        case actionTypes.SET_MATCHES:
+            return {
+                ...state,
+                matches: action.matches
             };
         default:
             return state;

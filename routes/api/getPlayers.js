@@ -10,7 +10,6 @@ const Member = require('../../models/Member')
 // @desc    get all players from group
 // @access  Private
 router.get('/getPlayers', passport.authenticate('jwt', {session: false}), async (req, res) => {
-    console.log(req.query)
     try {
         const group = await Group.findById(req.query.id)
 

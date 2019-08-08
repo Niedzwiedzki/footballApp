@@ -1,10 +1,12 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../axios';
 
-export const setGroup = (id) => {
+export const setGroup = (id, competition, name) => {
     return {
         type: actionTypes.SET_GROUP,
-        groupId: id
+        groupId: id,
+        competitionId: competition,
+        name: name
     };
 } 
 
@@ -29,6 +31,7 @@ export const getPlayers = (token, id) => {
         }
         )
             .then(response => {
+                
                 dispatch(groupPlayers(response.data))
             })
             .catch (error => {
@@ -36,3 +39,35 @@ export const getPlayers = (token, id) => {
             })
     }
 }
+
+
+export const setMatches = (matches) => {
+    return {
+        type: actionTypes.SET_MATCHES,
+        matches: matches
+    };
+} 
+
+
+export const getMatches = (token, competitionId) => {
+    return dispatch => {
+        const data = {
+            competitionId: competitionId
+        }
+        axios.get('getMatches',
+        { params: data, headers: {
+            "Authorization" : token,
+            "Content-Type" : "application/json"
+          }
+        }
+        )
+            .then(response => {
+                console.log(response.data)
+                dispatch(setMatches(response.data))
+            })
+            .catch (error => {
+                console.log(error.response)
+            })
+    }
+}
+

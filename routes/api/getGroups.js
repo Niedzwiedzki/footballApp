@@ -19,12 +19,14 @@ router.get('/getGroups', passport.authenticate('jwt', {session: false}), async (
                 return {
                     id: group.id,
                     name: group.name,
+                    competition: group.competitionId,
                     admin: true
                 }
             } else {
                 return {
                     id: group.id,
                     name: group.name,
+                    competition: group.competitionId,
                     admin: false
                 }  
             }
