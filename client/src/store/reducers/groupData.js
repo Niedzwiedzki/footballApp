@@ -1,22 +1,12 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    groupId: '',
-    competitionId: '',
     players: [],
-    matches: {finished: [], scheduled: []},
-    name:''
+    matches: {finished: [], scheduled: []}
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
-        case actionTypes.SET_GROUP:
-            return {
-                ...state,
-                groupId: action.groupId,
-                competitionId: action.competitionId,
-                name: action.name
-            };
         case actionTypes.GET_PLAYERS:
             return {
                 ...state,
@@ -27,6 +17,36 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 matches: action.matches
             };
+        case actionTypes.UPDATE_BETS:
+            const updatedMatches = state.matches.scheduled.slice()
+            updatedMatches[action.index].bet = {
+                ...updatedMatches[action.index].bet,
+                [action.e.target.dataset.team]: Number(action.e.target.value)
+            }
+            return {
+                ...state,
+                matches: {
+                    ...state.matches,
+                    scheduled: [...updatedMatches]
+                }
+            }
+        case actionTypes.INCREASE_OR_DECREASE:
+            if(state.matches.scheduled[action.index].bet[action.team] === 0 && action.op === -1){
+                console.log('cannot update')
+            } else {
+                const updatedMatchesIncDec = state.matches.scheduled.slice()
+                updatedMatchesIncDec[action.index].bet = {
+                    ...updatedMatchesIncDec[action.index].bet,
+                    [action.team]: Number(updatedMatchesIncDec[action.index].bet[action.team]) + action.op
+                }
+                    return {
+                        ...state,
+                        matches: {
+                            ...state.matches,
+                            scheduled: [...updatedMatchesIncDec]
+                        }
+                    }
+            }
         default:
             return state;
     }

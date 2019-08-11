@@ -21,4 +21,6 @@ export const GET_PLAYERS = "GET_PLAYERS";
 
 export const SET_MATCHES = "SET_MATCHES";
 
+export const UPDATE_BETS = "UPDATE_BETS";
+export const INCREASE_OR_DECREASE = "INCREASE_OR_DECREASE";
 

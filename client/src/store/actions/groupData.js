@@ -2,13 +2,11 @@ import * as actionTypes from './actionTypes';
 import axios from '../../axios';
 
 export const setGroup = (id, competition, name) => {
-    return {
-        type: actionTypes.SET_GROUP,
-        groupId: id,
-        competitionId: competition,
-        name: name
-    };
+    localStorage.setItem('id', id);
+    localStorage.setItem('competition', competition);
+    localStorage.setItem('name', name);
 } 
+
 
 
 export const groupPlayers = (players) => {
@@ -70,4 +68,41 @@ export const getMatches = (token, competitionId) => {
             })
     }
 }
+
+
+export const groupCheckState = () => {
+    return dispatch => {
+        const id = localStorage.getItem('id');
+        const competition = localStorage.getItem('competition');
+        const name = localStorage.getItem('name');
+        const token = localStorage.getItem('token')
+            const expirationDate = new Date( localStorage.getItem('expirationDate'));
+            if(expirationDate > new Date() && id && competition && name) {
+                dispatch(getPlayers(token, id));
+                dispatch(getMatches(token, competition))
+            }
+    }
+}
+
+
+export const updateBets = (matchdata, index, e) => {
+    if(matchdata && !e.target.value){
+        return {
+            type: actionTypes.INCREASE_OR_DECREASE,
+            team: matchdata.team,
+            op: matchdata.op,
+            index: index
+        };
+    }  else {
+        return {
+            type: actionTypes.UPDATE_BETS,
+            e: e,
+            index: index
+        };
+
+    }
+
+} 
+
+
 

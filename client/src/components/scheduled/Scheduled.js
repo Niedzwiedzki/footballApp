@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const Scheduled = (props) => {
 
   return (
@@ -11,8 +12,8 @@ const Scheduled = (props) => {
         </div>
         <form>
           <div className="width-mdplus">
-            <button type="button" className="btn btn-danger width-sm">-</button>
-            <button type="button" className="btn btn-success width-sm">+</button>
+            <button type="button" className="btn btn-danger width-sm" onClick={props.decreaseHome}>-</button>
+            <button type="button" className="btn btn-success width-sm" onClick={props.increaseHome}>+</button>
           </div>
           <div className="width-md">
             <input type="number"
@@ -29,9 +30,9 @@ const Scheduled = (props) => {
             />
           </div>
           <div className="width-mdplus">
-            <button type="button" className="btn btn-success width-sm">+</button>
-            <button type="button" className="btn btn-danger width-sm">-</button>
-            <button type="submit" className="btn btn-primary width-sm">></button>
+            <button type="button" className="btn btn-success width-sm" onClick={props.increaseAway}>+</button>
+            <button type="button" className="btn btn-danger width-sm" onClick={props.decreaseAway}>-</button>
+            <button type="submit" className="btn btn-primary width-sm" onClick={props.send}>></button>
           </div>
         </form>
       </div>

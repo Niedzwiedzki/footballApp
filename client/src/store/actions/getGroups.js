@@ -25,7 +25,6 @@ export const getGroups = (token) => {
         }
         )
             .then(response => {
-                console.log(response.data)
                 dispatch(yourGroups(response.data))
             })
             .catch (error => {

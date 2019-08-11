@@ -9,92 +9,12 @@ import { Link } from 'react-router-dom';
 
 const Group = (state) => {
     const [formData, setFormData] = useState({
-        // name: "Mistrzostwa u Janka",
-    finished: [
-        {
-            id: "12345",
-            homeTeam: {
-                name: "Brazil",
-                score: 3,
-                bet: 3
-            },
-            awayTeam: {
-                name: "France",
-                score: 2,
-                bet: 2
-            },
-            score: 3
-        },
-        {
-            id: "123456",
-            homeTeam: {
-                name: "Germany",
-                score: 0,
-                bet: 1
-            },
-            awayTeam: {
-                name: "Spain",
-                score: 0,
-                bet: 1
-            },
-            score: 1
-        },
-        {
-            id: "1234567",
-            homeTeam: {
-                name: "Poland",
-                score: 1,
-                bet: 0
-            },
-            awayTeam: {
-                name: "Italy",
-                score: 0,
-                bet: 2
-            },
-            score: 0
-        }
-    ],
-    scheduled: [        
-        {
-        id: "123458",
-        homeTeam: {
-            name: "England",
-            bet: 3
-        },
-        awayTeam: {
-            name: "Ukraine",
-            bet: 1
-        }
-     },
-     {
-        id: "123459",
-        homeTeam: {
-            name: "Ireland",
-            bet: null
-        },
-        awayTeam: {
-            name: "Sweden",
-            bet: null
-        }
-     },
-     {
-        id: "123450",
-        homeTeam: {
-            name: "Greece",
-            bet: null
-        },
-        awayTeam: {
-            name: "Portugal",
-            bet: null
-        }
-     }
-],
+
 showFinished: false
 
       });
     
-    console.log(state.matches.scheduled)
-      let { finished, scheduled, showFinished } = formData;
+      let { showFinished } = formData;
 
 
       const clickFinished = () => {
@@ -105,9 +25,9 @@ showFinished: false
         setFormData({ ...formData, showFinished: false});
     }
 
-    const onChange = (e, index) => {
-        scheduled[index][e.target.dataset.team].bet = e.target.value
-        setFormData({ ...formData});
+    const onChange = (matchdata, index, e) => {
+        e.preventDefault()
+        state.updateBets(matchdata, index, e)
     }
     let displayed =         
         <ul className="list-group matchesToPlay text-primary">
@@ -115,11 +35,15 @@ showFinished: false
                 state.matches.scheduled.map(function(item, index){
                     return <Scheduled 
                     homeTeam={item.homeTeam.name}
-                    homeBet={1}
+                    homeBet={item.bet.homeTeam}
                     awayTeam={item.awayTeam.name}
-                    awayBet={1}
+                    awayBet={item.bet.awayTeam}
                     key={item.id}
-                    changed = {e => onChange(e, index)}/>;
+                    decreaseHome={(e) => onChange({op: -1, team: 'homeTeam'}, index, e)}
+                    increaseHome={(e) => onChange({op: 1, team: 'homeTeam'}, index, e)}
+                    decreaseAway={(e) => onChange({op: -1, team: 'awayTeam'}, index, e)}
+                    increaseAway={(e) => onChange({op: 1, team: 'awayTeam'}, index, e)}
+                    changed = {e => onChange(undefined, index, e)}/>;
                 })
         }
         </ul> 
@@ -143,13 +67,13 @@ showFinished: false
     }
 
     useEffect(() => {
-        state.getPlayers(state.token, state.selectedGroup)
-        state.getMatches(state.token, state.competitionId)
+        state.checkGroupSelection()
+
         }, [])
   return (
     <Fragment>
       <div className="col-sm-6 height-lg">
-      <div className="groupName"><Link to='/dashboard'><button type="button" className="btn btn-info"><i className="left"/></button></Link><h3>{state.name}</h3></div>
+      <div className="groupName"><Link to='/dashboard'><button type="button" className="btn btn-info"><i className="left"/></button></Link><h3>{localStorage.getItem('name')}</h3></div>
         <ul className="list-group list-group-flush members">
             {
                state.players.map(function(player){
@@ -181,8 +105,8 @@ const mapStateToProps = state => {
   
   const mapDispatchToProps = dispatch => {
     return {
-      getPlayers: (token, id) => dispatch(actionTypes.getPlayers(token, id)),
-      getMatches: (token, competitionId) => dispatch(actionTypes.getMatches(token, competitionId))
+      checkGroupSelection: () => dispatch(actionTypes.groupCheckState()),
+      updateBets: (matchdata, index, e) => dispatch(actionTypes.updateBets(matchdata, index, e))
     }
   }
 

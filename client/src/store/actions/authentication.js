@@ -44,6 +44,9 @@ export const authRegisterFail = (error) => {
 export const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate')
+    localStorage.removeItem('name');
+    localStorage.removeItem('competition')
+    localStorage.removeItem('id')
     return {
         type: actionTypes.LOGOUT
     }

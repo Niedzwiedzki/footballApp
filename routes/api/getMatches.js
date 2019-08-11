@@ -21,8 +21,17 @@ router.get('/getMatches', passport.authenticate('jwt', {session: false}), async 
         })
         matchesFiltred.scheduled = matchesParsed.matches.filter(match => {
             return match.status === "SCHEDULED"
+        }) 
+        const matchesWithBet = matchesFiltred.scheduled.map(match => {
+            return {
+                ...match,
+                bet: {homeTeam: '', awayTeam: ''}
+            }
         })
-        res.send(matchesFiltred)
+
+        const matchesToSend = {finished: matchesFiltred.finished, scheduled: matchesWithBet}
+
+        res.send(matchesToSend)
             
     } catch (e) {
         res.status(400).send(e)
