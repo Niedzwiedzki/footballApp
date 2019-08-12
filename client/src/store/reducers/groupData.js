@@ -31,9 +31,8 @@ const reducer = (state = initialState, action) => {
                 }
             }
         case actionTypes.INCREASE_OR_DECREASE:
-            if(state.matches.scheduled[action.index].bet[action.team] === 0 && action.op === -1){
-                console.log('cannot update')
-            } else {
+            if(state.matches.scheduled[action.index].bet[action.team] > 0 || action.op !== -1){
+
                 const updatedMatchesIncDec = state.matches.scheduled.slice()
                 updatedMatchesIncDec[action.index].bet = {
                     ...updatedMatchesIncDec[action.index].bet,
@@ -46,6 +45,8 @@ const reducer = (state = initialState, action) => {
                             scheduled: [...updatedMatchesIncDec]
                         }
                     }
+            } else {
+                console.log('cannot update')
             }
         default:
             return state;

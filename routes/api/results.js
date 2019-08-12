@@ -110,9 +110,16 @@ router.post(
   '/predictresults',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
+    console.log(req.body.id, req.body.homeBet, req.body.awayBet, req.body.group, req.user._id)
     const groupId = req.body.group;
-    const predictions = req.body.predictions;
-    predictions.status = "scheduled"
+    const predictions = {
+      id: req.body.id,
+      homeTeam: req.body.homeBet,
+      awayBet: req.body.awayBet,
+      status: "scheduled"
+    }
+    // const predictions = req.body.predictions;
+    // predictions.status = "scheduled"
     try {
       const group = await Group.findById(groupId);
       if (!group) {

@@ -6,6 +6,7 @@ import Scheduled from '../scheduled/Scheduled';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
 import { Link } from 'react-router-dom';
+import axios from '../../axios';
 
 const Group = (state) => {
     const [formData, setFormData] = useState({
@@ -29,6 +30,36 @@ showFinished: false
         e.preventDefault()
         state.updateBets(matchdata, index, e)
     }
+
+    const predictResult = (e, predictData) => {
+      e.preventDefault();
+        if(typeof(predictData.homeBet) === "number" && typeof(predictData.awayBet) === "number"){
+                const betData = {
+                    id: predictData.id,
+                    homeBet: predictData.homeBet,
+                    awayBet: predictData.awayBet,
+                    group: localStorage.getItem('id')
+                }
+                const token = localStorage.getItem('token')
+                axios.post('predictresults', betData,
+                { headers: {
+                    "Authorization" : token,
+                    "Content-Type" : "application/json"
+                  }
+                }
+                )
+                    .then(response => {
+                        console.log(response.data)
+                        // dispatch(setMatches(response.data))
+                    })
+                    .catch (error => {
+                        console.log(error.response)
+                    })
+    
+        }
+  }
+
+
     let displayed =         
         <ul className="list-group matchesToPlay text-primary">
         {
@@ -43,6 +74,7 @@ showFinished: false
                     increaseHome={(e) => onChange({op: 1, team: 'homeTeam'}, index, e)}
                     decreaseAway={(e) => onChange({op: -1, team: 'awayTeam'}, index, e)}
                     increaseAway={(e) => onChange({op: 1, team: 'awayTeam'}, index, e)}
+                    send={(e) => predictResult(e, {id: item.id, homeBet: item.bet.homeTeam,awayBet: item.bet.awayTeam})}
                     changed = {e => onChange(undefined, index, e)}/>;
                 })
         }

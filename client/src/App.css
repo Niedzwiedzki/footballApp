@@ -221,6 +221,11 @@ input[type=number]::-webkit-outer-spin-button {
 
 .groupName {
   display: flex;
+  justify-content: flex-start;
+}
+
+.groupName > * {
+  margin: 0 5px;
 }
 
 i {
