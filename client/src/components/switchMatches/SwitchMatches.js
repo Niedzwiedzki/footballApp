@@ -9,6 +9,9 @@ const SwitchMatches = (props) => {
         <li className="nav-item">
             <a className="nav-link" data-toggle="tab" href="#menu1" onClick={props.clickFinished}>Finished</a>
         </li>
+        <li className="nav-item">
+            <a className="nav-link" data-toggle="tab" href="#menu1" onClick={props.clickInPlay}>In Play</a>
+        </li>
     </ul>
   );
 };

@@ -2,9 +2,12 @@ import React from 'react';
 
 
 const Scheduled = (props) => {
-
+  let predictionStatus = 'list-group-item space'
+  if(props.status === "full"){
+    predictionStatus = "list-group-item space completed"
+  }
   return (
-    <li className="list-group-item space">
+    <li className={predictionStatus}>
       <div className="column-layout">
         <div className="width-fl">
           <span>{props.homeTeam}</span>

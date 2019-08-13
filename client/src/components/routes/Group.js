@@ -1,34 +1,46 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import Member from '../member/Member';
 import SwitchMatches from '../switchMatches/SwitchMatches';
-import Finished from '../finished/Finished';
-import Scheduled from '../scheduled/Scheduled';
+import Finished from '../matches/finished/Finished';
+import Scheduled from '../matches/scheduled/Scheduled';
+import InPlay from '../matches/inPlay/InPlay';
 import { connect } from 'react-redux';
 import * as actionTypes from '../../store/actions/index';
 import { Link } from 'react-router-dom';
 import axios from '../../axios';
 
 const Group = (state) => {
+    console.log(state.matches)
+
     const [formData, setFormData] = useState({
 
-showFinished: false
+showScheduled: true,
+showFinished: false,
+showInPlay: false
 
       });
     
-      let { showFinished } = formData;
+      let {showScheduled, showFinished, showInPlay } = formData;
 
 
       const clickFinished = () => {
-        setFormData({ ...formData, showFinished: true});
+        setFormData({ ...formData, showFinished: true, showScheduled: false, showInPlay: false});
       }
 
       const clickScheduled = () => {
-        setFormData({ ...formData, showFinished: false});
+        setFormData({ ...formData, showFinished: false, showScheduled: true, showInPlay: false});
     }
+
+      const clickInPlay = () => {
+        setFormData({ ...formData, showFinished: false, showScheduled: false, showInPlay: true});
+    }
+
+
 
     const onChange = (matchdata, index, e) => {
         e.preventDefault()
-        state.updateBets(matchdata, index, e)
+        const value = {score: e.target.value, team: e.target.dataset.team}
+        state.updateBets(matchdata, index, value)
     }
 
     const predictResult = (e, predictData) => {
@@ -50,7 +62,6 @@ showFinished: false
                 )
                     .then(response => {
                         console.log(response.data)
-                        // dispatch(setMatches(response.data))
                     })
                     .catch (error => {
                         console.log(error.response)
@@ -58,9 +69,9 @@ showFinished: false
     
         }
   }
-
-
-    let displayed =         
+  let displayed
+  if(showScheduled) {
+      displayed =         
         <ul className="list-group matchesToPlay text-primary">
         {
                 state.matches.scheduled.map(function(item, index){
@@ -70,6 +81,7 @@ showFinished: false
                     awayTeam={item.awayTeam.name}
                     awayBet={item.bet.awayTeam}
                     key={item.id}
+                    status={item.status}
                     decreaseHome={(e) => onChange({op: -1, team: 'homeTeam'}, index, e)}
                     increaseHome={(e) => onChange({op: 1, team: 'homeTeam'}, index, e)}
                     decreaseAway={(e) => onChange({op: -1, team: 'awayTeam'}, index, e)}
@@ -79,24 +91,40 @@ showFinished: false
                 })
         }
         </ul> 
-    if (showFinished){
-        displayed =         
-        <ul className="list-group matchesPlayed">
-        {
-               state.matches.finished.map(function(item){
-                    return <Finished 
-                    homeTeam={item.homeTeam.name}
-                    homeResult={item.score.fullTime.homeTeam}
-                    homeBet={99}
-                    awayTeam={item.awayTeam.name}
-                    awayResult={item.score.fullTime.awayTeam}
-                    awayBet={99}
-                    score = {[0,1,3][Math.floor(Math.random()*3)]}
-                    key={item.id}/>;
-                  })
-        }
-        </ul>   
+  } else if (showFinished){
+    displayed =         
+    <ul className="list-group matchesPlayed">
+    {
+            state.matches.finished.map(function(item){
+                return <Finished 
+                homeTeam={item.homeTeam.name}
+                homeResult={item.score.fullTime.homeTeam}
+                homeBet={99}
+                awayTeam={item.awayTeam.name}
+                awayResult={item.score.fullTime.awayTeam}
+                awayBet={99}
+                score = {[0,1,3][Math.floor(Math.random()*3)]}
+                key={item.id}/>;
+              })
     }
+    </ul>   
+} else if (showInPlay){
+  displayed =         
+  <ul className="list-group text-primary">
+  {
+          state.matches.inPlay.map(function(item){
+              return <InPlay
+              homeTeam={item.homeTeam.name}
+              homeResult={item.score.fullTime.homeTeam}
+              homeBet={99}
+              awayTeam={item.awayTeam.name}
+              awayResult={item.score.fullTime.awayTeam}
+              awayBet={99}
+              key={item.id}/>;
+            })
+  }
+  </ul> 
+}
 
     useEffect(() => {
         state.checkGroupSelection()
@@ -115,7 +143,7 @@ showFinished: false
         </ul>
       </div>
       <div className="col-sm-6">
-        <SwitchMatches clickFinished={() => clickFinished()} clickScheduled={() => clickScheduled()} />
+        <SwitchMatches clickFinished={() => clickFinished()} clickScheduled={() => clickScheduled()} clickInPlay={() => clickInPlay()}/>
         {displayed}
       </div>
     </Fragment>

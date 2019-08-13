@@ -15,11 +15,11 @@ const Finished = (props) => {
       <div className="width-lg">{props.homeTeam}</div>
         <div className="width-sm">
             <span className="badge badge-secondary">{props.homeResult}</span>
-            <span className="badge badge-secondary">{props.homeBet}</span>
+            <span className="badge badge-secondary">{props.awayResult}</span>
         </div>
       <div className="width-lg">{props.awayTeam}</div>
       <div className="width-fl">
-          <span className="badge badge-primary">{props.awayResult}</span>
+          <span className="badge badge-primary">{props.homeBet}</span>
           <span className="badge badge-primary">{props.awayBet}</span>
       </div>
     </div>

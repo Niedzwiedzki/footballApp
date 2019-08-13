@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
     players: [],
-    matches: {finished: [], scheduled: []}
+    matches: {finished: [], scheduled: [], inPlay:[]}
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,10 +18,11 @@ const reducer = (state = initialState, action) => {
                 matches: action.matches
             };
         case actionTypes.UPDATE_BETS:
+            console.log(action.value)
             const updatedMatches = state.matches.scheduled.slice()
             updatedMatches[action.index].bet = {
                 ...updatedMatches[action.index].bet,
-                [action.e.target.dataset.team]: Number(action.e.target.value)
+                [action.value.team]: Number(action.value.score)
             }
             return {
                 ...state,

@@ -16,28 +16,6 @@ export const groupPlayers = (players) => {
     };
 } 
 
-export const getPlayers = (token, id) => {
-    return dispatch => {
-        const groupId = {
-            id: id
-        }
-        axios.get('getPlayers',
-        { params: groupId, headers: {
-            "Authorization" : token,
-            "Content-Type" : "application/json"
-          }
-        }
-        )
-            .then(response => {
-                
-                dispatch(groupPlayers(response.data))
-            })
-            .catch (error => {
-                console.log(error.response)
-            })
-    }
-}
-
 
 export const setMatches = (matches) => {
     return {
@@ -47,12 +25,13 @@ export const setMatches = (matches) => {
 } 
 
 
-export const getMatches = (token, competitionId) => {
+export const getMatchesAndPlayers = (token, competition, id) => {
     return dispatch => {
         const data = {
-            competitionId: competitionId
+            competitionId: competition,
+            id: id
         }
-        axios.get('getMatches',
+        axios.get('getMatchesAndPlayers',
         { params: data, headers: {
             "Authorization" : token,
             "Content-Type" : "application/json"
@@ -60,8 +39,8 @@ export const getMatches = (token, competitionId) => {
         }
         )
             .then(response => {
-                console.log(response.data)
-                dispatch(setMatches(response.data))
+                dispatch(setMatches(response.data.matchesToSend))
+                dispatch(groupPlayers(response.data.groupMembers))
             })
             .catch (error => {
                 console.log(error.response)
@@ -78,15 +57,14 @@ export const groupCheckState = () => {
         const token = localStorage.getItem('token')
             const expirationDate = new Date( localStorage.getItem('expirationDate'));
             if(expirationDate > new Date() && id && competition && name) {
-                dispatch(getPlayers(token, id));
-                dispatch(getMatches(token, competition))
+                dispatch(getMatchesAndPlayers(token, competition, id))
             }
     }
 }
 
 
-export const updateBets = (matchdata, index, e) => {
-    if(matchdata && !e.target.value){
+export const updateBets = (matchdata, index, value) => {
+    if(matchdata && !value.score){
         return {
             type: actionTypes.INCREASE_OR_DECREASE,
             team: matchdata.team,
@@ -96,7 +74,7 @@ export const updateBets = (matchdata, index, e) => {
     }  else {
         return {
             type: actionTypes.UPDATE_BETS,
-            e: e,
+            value: value,
             index: index
         };
 
