@@ -82,6 +82,54 @@ export const updateBets = (matchdata, index, value) => {
 
 } 
 
+export const sendingBetStart = (index) => {
+    return {
+        type: actionTypes.SENDING_BET_START,
+        index: index
+    };
+} 
+
+
+export const sendingBetSuccess = (index) => {
+    return {
+        type: actionTypes.SENDING_BET_SUCCESS,
+        index: index
+    };
+} 
+
+
+export const sendBet = (predictData, index) => {
+    return dispatch => {
+        dispatch(sendingBetStart(index))
+        if(typeof(predictData.homeBet) === "number" && typeof(predictData.awayBet) === "number"){
+            const betData = {
+                id: predictData.id,
+                homeBet: predictData.homeBet,
+                awayBet: predictData.awayBet,
+                group: localStorage.getItem('id')
+            }
+            const token = localStorage.getItem('token')
+            axios.post('predictresults', betData,
+            { headers: {
+                "Authorization" : token,
+                "Content-Type" : "application/json"
+            }
+            }
+            )
+                .then(response => {
+                    setTimeout(()=>{
+                        dispatch(sendingBetSuccess(index))
+                    },1000)
+                    
+                })
+                .catch (error => {
+                    console.log(error.response)
+                })
+
+        }
+    }
+} 
+
 
 
 

@@ -4,7 +4,7 @@ const InPlay = (props) => {
 
   return (
     <li className='list-group-item space inPlay'>
-    <div className="spinner-border text-light live"></div>
+    <div className="spinner-border text-light matchItemStatus"></div>
     <div className="column-layout">
       <div className="width-lg">{props.homeTeam}</div>
         <div className="width-sm">

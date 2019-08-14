@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import axios from '../../axios';
 
 const Group = (state) => {
-    console.log(state.matches)
 
     const [formData, setFormData] = useState({
 
@@ -20,7 +19,7 @@ showInPlay: false
 
       });
     
-      let {showScheduled, showFinished, showInPlay } = formData;
+      let {showScheduled, showFinished, showInPlay} = formData;
 
 
       const clickFinished = () => {
@@ -43,31 +42,9 @@ showInPlay: false
         state.updateBets(matchdata, index, value)
     }
 
-    const predictResult = (e, predictData) => {
+    const predictResult = (e, predictData, index) => {
       e.preventDefault();
-        if(typeof(predictData.homeBet) === "number" && typeof(predictData.awayBet) === "number"){
-                const betData = {
-                    id: predictData.id,
-                    homeBet: predictData.homeBet,
-                    awayBet: predictData.awayBet,
-                    group: localStorage.getItem('id')
-                }
-                const token = localStorage.getItem('token')
-                axios.post('predictresults', betData,
-                { headers: {
-                    "Authorization" : token,
-                    "Content-Type" : "application/json"
-                  }
-                }
-                )
-                    .then(response => {
-                        console.log(response.data)
-                    })
-                    .catch (error => {
-                        console.log(error.response)
-                    })
-    
-        }
+      state.sendBet(predictData, index)
   }
   let displayed
   if(showScheduled) {
@@ -76,6 +53,7 @@ showInPlay: false
         {
                 state.matches.scheduled.map(function(item, index){
                     return <Scheduled 
+                    sendingStatus={item.status}
                     homeTeam={item.homeTeam.name}
                     homeBet={item.bet.homeTeam}
                     awayTeam={item.awayTeam.name}
@@ -86,7 +64,7 @@ showInPlay: false
                     increaseHome={(e) => onChange({op: 1, team: 'homeTeam'}, index, e)}
                     decreaseAway={(e) => onChange({op: -1, team: 'awayTeam'}, index, e)}
                     increaseAway={(e) => onChange({op: 1, team: 'awayTeam'}, index, e)}
-                    send={(e) => predictResult(e, {id: item.id, homeBet: item.bet.homeTeam,awayBet: item.bet.awayTeam})}
+                    send={(e) => predictResult(e, {id: item.id, homeBet: item.bet.homeTeam,awayBet: item.bet.awayTeam}, index)}
                     changed = {e => onChange(undefined, index, e)}/>;
                 })
         }
@@ -161,12 +139,13 @@ const mapStateToProps = state => {
     matches: state.groupData.matches
     }
   }
-  
+
   
   const mapDispatchToProps = dispatch => {
     return {
       checkGroupSelection: () => dispatch(actionTypes.groupCheckState()),
-      updateBets: (matchdata, index, e) => dispatch(actionTypes.updateBets(matchdata, index, e))
+      updateBets: (matchdata, index, e) => dispatch(actionTypes.updateBets(matchdata, index, e)),
+      sendBet: (predictData, index) => dispatch(actionTypes.sendBet(predictData, index))
     }
   }
 

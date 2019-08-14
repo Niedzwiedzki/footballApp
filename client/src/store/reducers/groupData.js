@@ -18,7 +18,6 @@ const reducer = (state = initialState, action) => {
                 matches: action.matches
             };
         case actionTypes.UPDATE_BETS:
-            console.log(action.value)
             const updatedMatches = state.matches.scheduled.slice()
             updatedMatches[action.index].bet = {
                 ...updatedMatches[action.index].bet,
@@ -49,6 +48,26 @@ const reducer = (state = initialState, action) => {
             } else {
                 console.log('cannot update')
             }
+        case actionTypes.SENDING_BET_START:
+            const updatedMatchesSending = state.matches.scheduled.slice()
+            updatedMatchesSending[action.index].status = 'sending'
+            return {
+                ...state,
+                matches: {
+                    ...state.matches,
+                    scheduled: [...updatedMatchesSending]
+                }
+            }
+        case actionTypes.SENDING_BET_SUCCESS:
+            const updatedMatchesSent = state.matches.scheduled.slice()
+            updatedMatchesSent[action.index].status = 'full'
+            return {
+                ...state,
+                matches: {
+                    ...state.matches,
+                    scheduled: [...updatedMatchesSent]
+                }
+            }
         default:
             return state;
     }
@@ -56,4 +75,3 @@ const reducer = (state = initialState, action) => {
 
 
 export default reducer;
-
