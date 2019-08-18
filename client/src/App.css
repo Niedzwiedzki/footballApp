@@ -148,6 +148,15 @@ body {
   width: 100%;
 }
 
+.team-container{
+  display: flex;
+  justify-content: space-between;
+}
+
+.team-container h5{
+  margin: 10px 10px;
+}
+
 .column-layout div{
   float: left;
   text-align: center;
@@ -191,16 +200,7 @@ input[type=number]::-webkit-outer-spin-button {
   position: relative;
 }
 
-.menuButton {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  transition: all .2s
-}
 
-.menuButton:hover{
-  transform: scale(1.5, 1.5);
-}
 
 #addButton .input-group-text{
   background-color: rgb(0,123,255);
@@ -256,4 +256,105 @@ i {
   position:absolute;
   top:3px;
   right:3px;
+}
+
+.hamburger{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  width: 35px;
+  height: 25px;
+  z-index: 2;
+}
+
+.hamburger div{
+  width: 35px;
+  height: 5px;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  top: 50%;
+
+}
+
+.hamburger div::after{
+  content: '';
+  width: 35px;
+  height: 5px;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  top: -10px;
+
+}
+
+.hamburger div::before{
+  content: '';
+  width: 35px;
+  height: 5px;
+  background-color: rgb(0, 0, 0);
+  position: absolute;
+  top: 10px;
+}
+
+.hamburger.close div{
+  visibility: hidden;
+}
+
+.hamburger.close div::after{
+  visibility: visible;
+  transform: rotate(45deg) translateY(-5px);;
+  transform-origin: 0 0;
+}
+
+.hamburger.close div::before{
+  visibility: visible;
+  transform: rotate(-45deg);
+  transform-origin: 0 0;
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(105,105,105, 0.8);
+  min-width: 320px;
+  z-index: 1;
+  padding: 50px 15px 30px 15px;
+}
+
+.menu li {
+  list-style: none;
+}
+
+
+.menuItem{
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu.hidden{
+  display: none;
+}
+
+
+.logoutButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: all .2s;
+}
+
+.logoutButton:hover{
+  transform: scale(1.5, 1.5);
+}
+
+.settingsButton {
+
+  transition: all 1s;
+  width: 30px;
+  cursor: pointer;
+}
+
+.settingsButton:hover{
+  transform: rotate(360deg);
 }

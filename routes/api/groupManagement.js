@@ -69,7 +69,7 @@ router.post(
       email: req.user.email,
       _id: req.user._id,
       bets: [],
-      results: {}
+      results: []
     };
 
     try {

@@ -3,22 +3,23 @@ import React from 'react';
 
 const Scheduled = (props) => {
   let predictionStatus = 'list-group-item space'
+  let sendingStatus;
   if(props.status === "full" || props.status === "sending"){
     predictionStatus = "list-group-item space completed"
   }
-  let sendingStatus;
-  if(props.sendingStatus === 'full'){
+
+  if(props.status === 'full'){
     sendingStatus = <div className="matchItemStatus">&#10003;</div>
-  } else if (props.sendingStatus === 'sending') {
+  } else if (props.status === 'sending') {
     sendingStatus = <div className="spinner-border text-light matchItemStatus"></div>
   }
   return (
     <li className={predictionStatus}>
       {sendingStatus}
       <div className="column-layout">
-        <div className="width-fl">
-          <span>{props.homeTeam}</span>
-          <span>{props.awayTeam}</span>
+        <div className="width-fl team-container">
+          <h5>{props.homeTeam}</h5>
+          <h5>{props.awayTeam}</h5>
         </div>
         <form>
           <div className="width-mdplus">

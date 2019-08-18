@@ -17,6 +17,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 groupToJoin: action.groupToJoin
             };
+        case actionTypes.LOGOUT:
+            return {
+            groups: [],
+            groupToJoin: {}
+        }
         default:
             return state;
     }

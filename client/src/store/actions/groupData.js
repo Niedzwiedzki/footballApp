@@ -10,9 +10,24 @@ export const setGroup = (id, competition, name) => {
 
 
 export const groupPlayers = (players) => {
+    const playersWithPoints = players.map(player => {
+        let points = 0
+        player.results.forEach(result => {
+            console.log(result)
+            points += result.score
+        })
+        return {
+            ...player,
+            totalPoints: points
+
+        }
+    })
+    //sorting players
+    playersWithPoints.sort(function(a, b){return b.totalPoints - a.totalPoints})
+
     return {
         type: actionTypes.GET_PLAYERS,
-        players: players
+        players: playersWithPoints
     };
 } 
 
@@ -43,7 +58,7 @@ export const getMatchesAndPlayers = (token, competition, id) => {
                 dispatch(groupPlayers(response.data.groupMembers))
             })
             .catch (error => {
-                console.log(error.response)
+                console.log(error)
             })
     }
 }

@@ -52,14 +52,14 @@ showInPlay: false
         <ul className="list-group matchesToPlay text-primary">
         {
                 state.matches.scheduled.map(function(item, index){
+          
                     return <Scheduled 
-                    sendingStatus={item.status}
                     homeTeam={item.homeTeam.name}
                     homeBet={item.bet.homeTeam}
                     awayTeam={item.awayTeam.name}
                     awayBet={item.bet.awayTeam}
                     key={item.id}
-                    status={item.status}
+                    status={item.betStatus}
                     decreaseHome={(e) => onChange({op: -1, team: 'homeTeam'}, index, e)}
                     increaseHome={(e) => onChange({op: 1, team: 'homeTeam'}, index, e)}
                     decreaseAway={(e) => onChange({op: -1, team: 'awayTeam'}, index, e)}
@@ -77,11 +77,11 @@ showInPlay: false
                 return <Finished 
                 homeTeam={item.homeTeam.name}
                 homeResult={item.score.fullTime.homeTeam}
-                homeBet={99}
+                homeBet={item.bet.homeTeam}
                 awayTeam={item.awayTeam.name}
                 awayResult={item.score.fullTime.awayTeam}
-                awayBet={99}
-                score = {[0,1,3][Math.floor(Math.random()*3)]}
+                awayBet={item.bet.awayTeam}
+                score = {item.betScore}
                 key={item.id}/>;
               })
     }
@@ -94,10 +94,10 @@ showInPlay: false
               return <InPlay
               homeTeam={item.homeTeam.name}
               homeResult={item.score.fullTime.homeTeam}
-              homeBet={99}
+              homeBet={item.bet.homeTeam}
               awayTeam={item.awayTeam.name}
               awayResult={item.score.fullTime.awayTeam}
-              awayBet={99}
+              awayBet={item.bet.awayTeam}
               key={item.id}/>;
             })
   }
@@ -105,8 +105,8 @@ showInPlay: false
 }
 
     useEffect(() => {
-        state.checkGroupSelection()
-
+      state.checkGroupSelection()
+      setInterval(()=>{state.checkGroupSelection()}, 60000)
         }, [])
   return (
     <Fragment>
@@ -115,7 +115,7 @@ showInPlay: false
         <ul className="list-group list-group-flush members">
             {
                state.players.map(function(player){
-                    return <Member name={player.name} points={1000} key={player._id}/>;
+                    return <Member name={player.name} points={player.totalPoints} key={player._id}/>;
                   })
             }
         </ul>

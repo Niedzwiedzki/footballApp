@@ -55,7 +55,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 token: null,
                 authStatus: false,
-                logMessage: null
+                logMessage: null,
+                regMessage: null
             };
 
         case actionTypes.WRONG_PASSWORDS:

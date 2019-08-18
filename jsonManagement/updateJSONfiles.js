@@ -57,7 +57,7 @@ const updateJSONfiles = () => {
                   } else {
                     result = 0;
                   }
-                  member.results[relatedMatch[0].id] = {homeTeam: bet.homeTeam, awayTeam: bet.awayTeam, status: relatedMatch[0].status, score: result}
+                  member.results.push({homeTeam: bet.homeTeam, awayTeam: bet.awayTeam, status: relatedMatch[0].status, score: result, id:relatedMatch[0].id})
                 }
               }
             })
@@ -70,7 +70,7 @@ const updateJSONfiles = () => {
 
 
       } else {
-        console.log("cannot download data")
+        console.log(`${competition} cannot download data`)
       }
 
     } catch (e) {

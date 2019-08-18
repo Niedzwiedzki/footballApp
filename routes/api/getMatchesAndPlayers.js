@@ -9,8 +9,6 @@ const fs = require('fs')
 // @access  Private
 router.get('/getMatchesAndPlayers', passport.authenticate('jwt', {session: false}), async (req, res) => {
     try {
-
-
         //prepare players
         const group = await Group.findById(req.query.id)
 
@@ -25,44 +23,55 @@ router.get('/getMatchesAndPlayers', passport.authenticate('jwt', {session: false
         if(checkMembership.length === 0) {
             return res.status(400).send("You aren't a member of this group")
         }
-
         //prepare matches
         const matches = await fs.readFileSync(`./competitions/_${req.query.competitionId}/matches.json`);
         const matchesParsed = JSON.parse(matches.toString())
         const matchesFiltred = {}
-        matchesFiltred.finished = matchesParsed.matches.filter(match => {
-            return match.status === "FINISHED"
-        })
-        matchesFiltred.scheduled = matchesParsed.matches.filter(match => {
-            return match.status === "SCHEDULED"
-        })
-        
-        matchesFiltred.inPLay = matchesParsed.matches.filter(match => {
-            return match.status === "IN_PLAY"
-        })
-        
         const oneMember = group.members.filter(member => {
             return member._id == req.user.id
         })
-        const matchesWithBet = matchesFiltred.scheduled.map(match => {
+
+        const matchesWithBet = matchesParsed.matches.map(match => {
             let bet = {homeTeam: '', awayTeam: ''}
-            let status = 'empty'
+            let betStatus = 'empty'
             const matchingBet = oneMember[0].bets.filter(bet => {
                 return bet.id === match.id
             })
+
+        //veryfing the score of prediction
+        const matchingResult = oneMember[0].results.filter(result => {
+                return result.id === match.id
+            })
+            let result = 0 
+            if(matchingResult[0] && matchingResult[0].score == 1){
+                result = 1
+            } else if(matchingResult[0] && matchingResult[0].score == 3){
+                result = 3
+            }
+
             if(matchingBet.length > 0){
                 bet = {homeTeam: matchingBet[0].homeTeam, awayTeam: matchingBet[0].awayTeam},
-                status = 'full'
+                betStatus = 'full'
             }
             return {
                 ...match,
                 bet,
-                status
+                betStatus,
+                betScore: result
             }
         })
+        matchesFiltred.finished = matchesWithBet.filter(match => {
+            return match.status === "FINISHED"
+        })
+        matchesFiltred.scheduled = matchesWithBet.filter(match => {
+            return match.status === "SCHEDULED"
+        })
+        
+        matchesFiltred.inPLay = matchesWithBet.filter(match => {
+            return match.status === "IN_PLAY" || match.status === "PAUSED"
+        })
 
-        const matchesToSend = {finished: matchesFiltred.finished, scheduled: matchesWithBet, inPlay: matchesFiltred.inPLay}
-
+        const matchesToSend = {finished: matchesFiltred.finished, scheduled: matchesFiltred.scheduled, inPlay: matchesFiltred.inPLay}
 
 
         // send player and matches

@@ -48,31 +48,26 @@ const updateJSONfilesMatchTime = async () => {
                   let winnerBet = bet.homeTeam - bet.awayTeam
                   let result;
                   if (bet.homeTeam == relatedMatchResult.homeTeam && bet.awayTeam == relatedMatchResult.awayTeam) {
-                    console.log('3 points!')
-                    console.log(bet)
-                    console.log(relatedMatchResult)
                     result = 3;
                   } else if ((winnerReal > 0 && winnerBet > 0) || (winnerReal < 0 && winnerBet < 0) || (winnerReal == 0 && winnerBet == 0)) {
-                    console.log('1 point!')
-                    console.log(bet)
-                    console.log(relatedMatchResult)
                     result = 1;
                   } else {
-                    console.log('0 point')
-                    console.log(bet)
-                    console.log(relatedMatchResult)
                     result = 0;
                   }
                   if (relatedMatch[0].status == "FINISHED") {
                     bet.status = 'finished';
                   }
-                  member.results[relatedMatch[0].id] = {homeTeam: bet.homeTeam, awayTeam: bet.awayTeam, status: relatedMatch[0].status, score: result}
+                  const updatedResults = member.results.filter(result => {
+                    return result.id != relatedMatch[0].id
+                  })
+                  updatedResults.push({homeTeam: bet.homeTeam, awayTeam: bet.awayTeam, status: relatedMatch[0].status, score: result, id:relatedMatch[0].id})
+                  member.results = [...updatedResults]
+                  
                 }
               }
             })
           })
-      
-          console.log(groupToUpdate)
+
           await groupToUpdate.markModified('members');
           await groupToUpdate.save();
         })

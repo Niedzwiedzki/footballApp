@@ -8,6 +8,7 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch(action.type) {
         case actionTypes.GET_PLAYERS:
+            
             return {
                 ...state,
                 players: action.players
@@ -50,7 +51,7 @@ const reducer = (state = initialState, action) => {
             }
         case actionTypes.SENDING_BET_START:
             const updatedMatchesSending = state.matches.scheduled.slice()
-            updatedMatchesSending[action.index].status = 'sending'
+            updatedMatchesSending[action.index].betStatus = 'sending'
             return {
                 ...state,
                 matches: {
@@ -60,13 +61,18 @@ const reducer = (state = initialState, action) => {
             }
         case actionTypes.SENDING_BET_SUCCESS:
             const updatedMatchesSent = state.matches.scheduled.slice()
-            updatedMatchesSent[action.index].status = 'full'
+            updatedMatchesSent[action.index].betStatus = 'full'
             return {
                 ...state,
                 matches: {
                     ...state.matches,
                     scheduled: [...updatedMatchesSent]
                 }
+            }
+        case actionTypes.LOGOUT:
+                return {
+                players: [],
+                matches: {finished: [], scheduled: [], inPlay:[]}
             }
         default:
             return state;

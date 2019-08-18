@@ -54,7 +54,7 @@ router.post('/login/:id', async (req, res) => {
                 "email" : member.email,
                 "_id" : member._id,
                 "bets" : [],
-                "results": {}
+                "results": []
             })
 
             member.memberGroups.push({id: group._id, name: group.name, competitionId: group.competitionId})
@@ -122,7 +122,7 @@ router.post('/register/:id', async (req, res) => {
                             "email" : newMember.email,
                             "_id" : newMember._id,
                             "bets" : [],
-                            "results": {}
+                            "results": []
                         })
                     await group.save()
                     const payload = { id: newMember.id, member: newMember.name } // create JWT payload
